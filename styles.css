@@ -47,3 +47,54 @@ li {
     border-radius: 5px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.input-container input {
+    border: 2px solid #f39c12; /* Borde amarillo */
+    border-radius: 50px; /* Marco circular */
+    padding: 10px 20px;
+    width: 300px; /* Ancho del campo */
+    margin-left: 10px; /* Espacio para el emoticono */
+}
+
+.score-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.score-container input {
+    width: 50px; /* Ancho del campo de puntaje */
+    margin-left: 10px; /* Espacio para el emoticono */
+}
+#movieList {
+    border: 2px solid #f39c12; /* Borde amarillo */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: #222; /* Fondo oscuro para la lista */
+    padding: 20px;
+    width: 300px; /* Ancho de la lista */
+    position: absolute; /* Para posicionar a la derecha */
+    right: 0; /* Colocarlo a la derecha */
+    top: 100px; /* Espacio desde la parte superior */
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #333; /* Fondo de cada película */
+    border-radius: 5px;
+}
+    
+
+
+
