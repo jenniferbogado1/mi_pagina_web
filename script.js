@@ -76,7 +76,7 @@ function setupStarClickEvents() {
         });
     });
 }
-}
+
 
 // Modificar la función `addMovie` para que guarde en localStorage
 function addMovie() {
