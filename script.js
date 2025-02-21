@@ -87,9 +87,7 @@ function saveMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     let newTitle = li.querySelector(".edit-title").value.trim();
     let newScore = li.querySelector(".edit-score").value;
-
-    // Obtener la cantidad de estrellas activas
-    let newStars = li.querySelectorAll(".stars-container .star.active").length;
+    let newStars = li.querySelectorAll(".stars-container .active").length;
 
     if (newTitle === "" || newScore < 1 || newScore > 10) {
         alert("Ingrese un nombre válido y un puntaje entre 1 y 10.");
@@ -97,11 +95,22 @@ function saveMovie(index) {
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies[index] = { title: newTitle, score: newScore, starRating: newStars };
-    localStorage.setItem("movies", JSON.stringify(movies));
+    
+    // ✅ Mantener la fecha original al editar
+    let originalDate = movies[index].addedDate || new Date().toLocaleDateString();
 
+    movies[index] = { 
+        title: newTitle, 
+        score: newScore, 
+        starRating: newStars, 
+        addedDate: originalDate,  // 🔥 Se mantiene la fecha original
+        poster: movies[index].poster // 🔥 Mantiene el póster original si existe
+    };
+
+    localStorage.setItem("movies", JSON.stringify(movies));
     loadMovies();
 }
+
 
 // Función para generar estrellas visualmente
 function generateStars(starRating) {
