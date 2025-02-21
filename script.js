@@ -161,7 +161,7 @@ function setupStarRating() {
 
 async function searchMovieFromAPI(title) {
     const apiKey =  'dbd32ea66d8c5fcd290b231b56374d89';// Reemplaza con tu clave de API
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${dbd32ea66d8c5fcd290b231b56374d89}&query=${encodeURIComponent(title)}`;
 
     try {
         let response = await fetch(url);
