@@ -9,6 +9,10 @@ function loadMovies() {
     movieList.innerHTML = "";
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
 
+    // Filtrado de películas según la búsqueda
+    let searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    movies = movies.filter(movie => movie.title.toLowerCase().includes(searchTerm));
+
     movies.forEach((movie, index) => {
         let li = document.createElement("li");
         li.dataset.index = index;
@@ -26,6 +30,42 @@ function loadMovies() {
     });
 
     setupStarClickEvents();
+}
+
+// Función para buscar películas
+function searchMovies() {
+    loadMovies();
+}
+
+// Función para agregar una nueva película
+function addMovie() {
+    let title = document.getElementById("movieTitle").value.trim();
+    let score = document.getElementById("movieScore").value;
+    let starRating = document.getElementById("starRating").dataset.rating || 0;
+
+    if (title === "" || score < 1 || score > 10) {
+        alert("Por favor, ingrese un nombre válido y un puntaje entre 1 y 10.");
+        return;
+    }
+
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.push({ title, score, starRating: parseInt(starRating) });
+    localStorage.setItem("movies", JSON.stringify(movies));
+
+    document.getElementById("movieTitle").value = "";
+    document.getElementById("movieScore").value = "";
+    document.getElementById("starRating").dataset.rating = 0;
+    document.querySelectorAll("#starRating .star").forEach(star => star.classList.remove("active"));
+
+    loadMovies();
+}
+
+// Función para eliminar películas
+function deleteMovie(index) {
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.splice(index, 1);
+    localStorage.setItem("movies", JSON.stringify(movies));
+    loadMovies();
 }
 
 // Función para editar una película
@@ -80,37 +120,6 @@ function setupStarClickEvents() {
     });
 }
 
-// Función para agregar una nueva película
-function addMovie() {
-    let title = document.getElementById("movieTitle").value.trim();
-    let score = document.getElementById("movieScore").value;
-    let starRating = document.getElementById("starRating").dataset.rating || 0;
-
-    if (title === "" || score < 1 || score > 10) {
-        alert("Por favor, ingrese un nombre válido y un puntaje entre 1 y 10.");
-        return;
-    }
-
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies.push({ title, score, starRating: parseInt(starRating) });
-    localStorage.setItem("movies", JSON.stringify(movies));
-
-    document.getElementById("movieTitle").value = "";
-    document.getElementById("movieScore").value = "";
-    document.getElementById("starRating").dataset.rating = 0;
-    document.querySelectorAll(".star").forEach(star => star.classList.remove("active"));
-
-    loadMovies();
-}
-
-// Función para eliminar películas
-function deleteMovie(index) {
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies.splice(index, 1);
-    localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies();
-}
-
 // Configuración del sistema de estrellas en el formulario
 function setupStarRating() {
     let starsContainer = document.getElementById("starRating");
@@ -133,4 +142,3 @@ function setupStarRating() {
         starsContainer.appendChild(star);
     }
 }
-
