@@ -9,15 +9,17 @@
             background-color: #121212; /* Fondo oscuro */
             color: #ffffff; /* Texto blanco */
             font-family: Arial, sans-serif;
-        }
-        h1 {
-            display: none; /* Oculta el título */
+            display: flex;
+            justify-content: center; /* Centra el contenido */
+            align-items: flex-start; /* Alinea al inicio */
+            height: 100vh; /* Altura completa de la ventana */
+            margin: 0; /* Sin márgenes */
         }
         .input-container, .score-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 20px;
         }
         .input-container input, .score-container input {
             border: 2px solid #f39c12; /* Borde amarillo */
@@ -37,10 +39,10 @@
             background-color: #222; /* Fondo oscuro para la lista */
             padding: 20px;
             width: 300px; /* Ancho de la lista */
-            position: absolute; /* Para posicionar a la derecha */
-            right: 0; /* Colocarlo a la derecha */
-            top: 100px; /* Espacio desde la parte superior */
             list-style-type: none; /* Eliminar viñetas de la lista */
+            position: relative; /* Posicionamiento relativo */
+            left: -200px; /* Ajustar posición a la izquierda */
+            margin-top: 20px; /* Margen superior */
         }
         li {
             display: flex;
@@ -58,25 +60,30 @@
         .active {
             color: gold;
         }
+        .popcorn {
+            margin-right: 5px; /* Espacio entre el emoticono y el texto */
+        }
     </style>
 </head>
 <body>
-    <div class="input-container">
-        <span>✏️</span> <!-- Emoticono de escribir -->
-        <input type="text" id="movieTitle" placeholder="Nombre de la película">
-    </div>
+    <div>
+        <div class="input-container">
+            <span>✏️</span> <!-- Emoticono de escribir -->
+            <input type="text" id="movieTitle" placeholder="Nombre de la película">
+        </div>
 
-    <div class="score-container">
-        <span>⭐</span> <!-- Emoticono de puntaje -->
-        <input type="number" id="movieScore" min="1" max="10" placeholder="Puntaje (1-10)">
+        <div class="score-container">
+            <span>⭐</span> <!-- Emoticono de puntaje -->
+            <input type="number" id="movieScore" min="1" max="10" placeholder="Puntaje (1-10)">
+        </div>
+        
+        <div id="starRating"></div>
+        <button onclick="addMovie()">Agregar Película</button>
+        
+        <input type="text" id="searchInput" placeholder="Buscar película" onkeyup="searchMovies()">
+        
+        <ul id="movieList"></ul>
     </div>
-    
-    <div id="starRating"></div>
-    <button onclick="addMovie()">Agregar Película</button>
-    
-    <input type="text" id="searchInput" placeholder="Buscar película" onkeyup="searchMovies()">
-    
-    <ul id="movieList"></ul>
 
     <script src="script.js"></script>
 </body>
