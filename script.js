@@ -144,3 +144,32 @@ function setupStarRating() {
         starsContainer.appendChild(star);
     }
 }
+
+
+async function searchMovieFromAPI(title) {
+    const apiKey =  'dbd32ea66d8c5fcd290b231b56374d89'; // Reemplaza con tu clave de API
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+
+    try {
+        let response = await fetch(url);
+        let data = await response.json();
+        if (data.results && data.results.length > 0) {
+            return data.results[0]; // Retornar la primera película encontrada
+        } else {
+            alert("No se encontraron resultados.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error al buscar la película:", error);
+    }
+}
+
+// Ejemplo de uso de la función
+document.getElementById("movieTitle").addEventListener("change", async function () {
+    let title = this.value;
+    let movieData = await searchMovieFromAPI(title);
+    if (movieData) {
+        // Puedes usar `movieData` para prellenar información adicional
+        console.log(movieData);
+    }
+});
