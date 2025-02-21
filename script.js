@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     loadMovies();
     setupStarRating();
@@ -29,6 +28,7 @@ function loadMovies() {
     setupStarClickEvents();
 }
 
+// Función para editar una película
 function editMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     li.querySelector(".edit-title").disabled = false;
@@ -37,11 +37,14 @@ function editMovie(index) {
     li.querySelector("button:nth-child(6)").style.display = "inline-block"; // Muestra "Guardar"
 }
 
+// Función para guardar la edición de una película
 function saveMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     let newTitle = li.querySelector(".edit-title").value.trim();
     let newScore = li.querySelector(".edit-score").value;
-    let newStars = li.querySelectorAll(".stars-container .active").length;
+
+    // Obtener la cantidad de estrellas activas
+    let newStars = li.querySelectorAll(".stars-container .star.active").length;
 
     if (newTitle === "" || newScore < 1 || newScore > 10) {
         alert("Ingrese un nombre válido y un puntaje entre 1 y 10.");
@@ -53,9 +56,9 @@ function saveMovie(index) {
     localStorage.setItem("movies", JSON.stringify(movies));
 
     loadMovies();
-}        
+}
 
-// Función para generar las estrellas visualmente
+// Función para generar estrellas visualmente
 function generateStars(starRating) {
     return Array.from({ length: 5 }, (_, i) =>
         `<span class="star ${i < starRating ? "active" : ""}" data-value="${i + 1}">★</span>`
@@ -76,10 +79,8 @@ function setupStarClickEvents() {
         });
     });
 }
-}
 
-
-// Modificar la función `addMovie` para que guarde en localStorage
+// Función para agregar una nueva película
 function addMovie() {
     let title = document.getElementById("movieTitle").value.trim();
     let score = document.getElementById("movieScore").value;
@@ -110,7 +111,7 @@ function deleteMovie(index) {
     loadMovies();
 }
 
-// Configuración del sistema de estrellas
+// Configuración del sistema de estrellas en el formulario
 function setupStarRating() {
     let starsContainer = document.getElementById("starRating");
     starsContainer.innerHTML = "";
@@ -122,9 +123,9 @@ function setupStarRating() {
         star.dataset.value = i;
 
         star.addEventListener("click", () => {
-            document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll("#starRating .star").forEach(s => s.classList.remove("active"));
             for (let j = 0; j < i; j++) {
-                document.querySelectorAll(".star")[j].classList.add("active");
+                document.querySelectorAll("#starRating .star")[j].classList.add("active");
             }
             starsContainer.dataset.rating = i;
         });
@@ -132,3 +133,4 @@ function setupStarRating() {
         starsContainer.appendChild(star);
     }
 }
+
