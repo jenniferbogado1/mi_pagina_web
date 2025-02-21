@@ -1,15 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let stars = document.querySelectorAll(".stars span");
-    let starContainer = document.getElementById("starRating");
+    loadMovies();
+
+    let starsContainer = document.getElementById("starRating");
+    starsContainer.innerHTML = "";
     
-    stars.forEach((star, index) => {
+    for (let i = 1; i <= 5; i++) {
+        let star = document.createElement("span");
+        star.innerHTML = "★";
+        star.classList.add("star");
+        star.dataset.value = i;
+
         star.addEventListener("click", () => {
-            stars.forEach((s, i) => {
-                s.classList.toggle("active", i <= index);
-            });
-            starContainer.dataset.rating = index + 1;
+            document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+            for (let j = 0; j < i; j++) {
+                document.querySelectorAll(".star")[j].classList.add("active");
+            }
+            starsContainer.dataset.rating = i;
         });
-    });
+
+        starsContainer.appendChild(star);
+    }
 });
 
 function addMovie() {
@@ -22,12 +32,36 @@ function addMovie() {
         return;
     }
 
-    let movieList = document.getElementById("movieList");
-    let li = document.createElement("li");
-    li.innerHTML = `<strong>${title}</strong> - Puntaje: ${score}/10 - 
-                    <span class="stars"> ${"★".repeat(starRating)}${"☆".repeat(5 - starRating)} </span>`;
-    movieList.appendChild(li);
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.push({ title, score, starRating });
+    localStorage.setItem("movies", JSON.stringify(movies));
 
     document.getElementById("movieTitle").value = "";
     document.getElementById("movieScore").value = "";
+    document.getElementById("starRating").dataset.rating = 0;
+    document.querySelectorAll(".star").forEach(star => star.classList.remove("active"));
+
+    loadMovies();
 }
+
+function loadMovies() {
+    let movieList = document.getElementById("movieList");
+    movieList.innerHTML = "";
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
+    movies.forEach((movie, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `<strong>${movie.title}</strong> - Puntaje: ${movie.score}/10 - 
+                        <span class="stars">${"★".repeat(movie.starRating)}${"☆".repeat(5 - movie.starRating)}</span>
+                        <button onclick="deleteMovie(${index})">Eliminar</button>`;
+        movieList.appendChild(li);
+    });
+}
+
+function deleteMovie(index) {
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.splice(index, 1);
+    localStorage.setItem("movies", JSON.stringify(movies));
+    loadMovies();
+}
+                        
