@@ -19,6 +19,7 @@ function loadMovies() {
 
         li.innerHTML = `
             <img src="${movie.poster}" alt="Póster de ${movie.title}" class="poster-img">
+						span class="popcorn">🍿</span> <!
             <input type="text" value="${movie.title}" class="edit-title" disabled>
             <input type="number" value="${movie.score}" class="edit-score" min="1" max="10" disabled>
             <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
