@@ -4,12 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Función para cargar películas desde localStorage
+
 function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
 
-    // Filtrado de películas según la búsqueda
     let searchTerm = document.getElementById("searchInput").value.toLowerCase();
     movies = movies.filter(movie => movie.title.toLowerCase().includes(searchTerm));
 
@@ -18,10 +18,11 @@ function loadMovies() {
         li.dataset.index = index;
 
         li.innerHTML = `
+            <img src="${movie.poster}" alt="Póster de ${movie.title}" class="poster-img">
             <input type="text" value="${movie.title}" class="edit-title" disabled>
             <input type="number" value="${movie.score}" class="edit-score" min="1" max="10" disabled>
             <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
-            <span>Agregada el: ${movie.addedDate}</span> <!-- Mostrar fecha de adición -->
+            <span>Agregada el: ${movie.addedDate}</span>
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
             <button onclick="deleteMovie(${index})">Eliminar</button>
@@ -43,6 +44,7 @@ function addMovie() {
     let title = document.getElementById("movieTitle").value.trim();
     let score = document.getElementById("movieScore").value;
     let starRating = document.getElementById("starRating").dataset.rating || 0;
+    let poster = document.querySelector("#posterPreview img")?.src || ""; // Obtener el póster si existe
 
     if (title === "" || score < 1 || score > 10) {
         alert("Por favor, ingrese un nombre válido y un puntaje entre 1 y 10.");
@@ -50,13 +52,14 @@ function addMovie() {
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    let addedDate = new Date().toLocaleDateString(); // Obtener la fecha actual
-    movies.push({ title, score, starRating: parseInt(starRating), addedDate }); // Asegúrate de incluir addedDate aquí
+    let addedDate = new Date().toLocaleDateString();
+    movies.push({ title, score, starRating: parseInt(starRating), addedDate, poster });
     localStorage.setItem("movies", JSON.stringify(movies));
 
     document.getElementById("movieTitle").value = "";
     document.getElementById("movieScore").value = "";
     document.getElementById("starRating").dataset.rating = 0;
+    document.getElementById("posterPreview").innerHTML = ""; // Limpiar el póster
     document.querySelectorAll("#starRating .star").forEach(star => star.classList.remove("active"));
 
     loadMovies();
@@ -146,15 +149,23 @@ function setupStarRating() {
 }
 
 
+
 async function searchMovieFromAPI(title) {
-    const apiKey =  'dbd32ea66d8c5fcd290b231b56374d89'; // Reemplaza con tu clave de API
+    const apiKey =  'dbd32ea66d8c5fcd290b231b56374d89';// Reemplaza con tu clave de API
     const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
 
     try {
         let response = await fetch(url);
         let data = await response.json();
+
         if (data.results && data.results.length > 0) {
-            return data.results[0]; // Retornar la primera película encontrada
+            let movie = data.results[0]; // Obtener la primera película encontrada
+            return {
+                title: movie.title,
+                releaseDate: movie.release_date,
+                rating: movie.vote_average,
+                poster: `https://image.tmdb.org/t/p/w200${movie.poster_path}` // Imagen del póster
+            };
         } else {
             alert("No se encontraron resultados.");
             return null;
@@ -164,12 +175,24 @@ async function searchMovieFromAPI(title) {
     }
 }
 
-// Ejemplo de uso de la función
+// Evento para buscar automáticamente la película en la API al escribir
 document.getElementById("movieTitle").addEventListener("change", async function () {
     let title = this.value;
     let movieData = await searchMovieFromAPI(title);
+
     if (movieData) {
-        // Puedes usar `movieData` para prellenar información adicional
-        console.log(movieData);
+        document.getElementById("movieScore").value = movieData.rating.toFixed(1); // Asigna la puntuación de la API
+        document.getElementById("starRating").dataset.rating = Math.round(movieData.rating / 2); // Escalar de 10 a 5 estrellas
+        document.querySelectorAll(".star").forEach(star => star.classList.remove("active"));
+        for (let i = 0; i < Math.round(movieData.rating / 2); i++) {
+            document.querySelectorAll(".star")[i].classList.add("active");
+        }
+
+        // Mostrar la imagen del póster
+        let posterContainer = document.getElementById("posterPreview");
+        posterContainer.innerHTML = `<img src="${movieData.poster}" alt="Póster de ${movieData.title}">`;
     }
 });
+
+
+
