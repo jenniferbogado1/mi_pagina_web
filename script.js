@@ -18,9 +18,10 @@ function loadMovies() {
         li.dataset.index = index;
 
         li.innerHTML = `
-            <input type="text" value="${movie.title}" class="edit-title" disabled>
+            input type="text" value="${movie.title}" class="edit-title" disabled>
             <input type="number" value="${movie.score}" class="edit-score" min="1" max="10" disabled>
             <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
+            <span>Agregada el: ${movie.addedDate}</span> <!-- Mostrar fecha de adición -->
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
             <button onclick="deleteMovie(${index})">Eliminar</button>
@@ -49,6 +50,7 @@ function addMovie() {
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    let addedDate = new Date().toLocaleDateString(); // Obtener la fecha actual
     movies.push({ title, score, starRating: parseInt(starRating) });
     localStorage.setItem("movies", JSON.stringify(movies));
 
