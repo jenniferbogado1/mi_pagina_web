@@ -19,7 +19,7 @@ function loadMovies() {
 
         li.innerHTML = `
             <img src="${movie.poster}" alt="Póster de ${movie.title}" class="poster-img">
-	    <span> class="popcorn">🍿</span> 
+	    <span class="popcorn">🍿</span> 
             <input type="text" value="${movie.title}" class="edit-title" disabled>
             <input type="number" value="${movie.score}" class="edit-score" min="1" max="10" disabled>
             <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
@@ -79,8 +79,9 @@ function editMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     li.querySelector(".edit-title").disabled = false;
     li.querySelector(".edit-score").disabled = false;
-    li.querySelector("button:nth-child(5)").style.display = "none"; // Oculta "Editar"
-    li.querySelector("button:nth-child(6)").style.display = "inline-block"; // Muestra "Guardar"
+    li.querySelector(".stars-container").dataset.editing = "true";
+    li.querySelector(".edit-btn").style.display = "none";
+    li.querySelector(".save-btn").style.display = "inline-block";
 }
 
 // Función para guardar la edición de una película
@@ -88,7 +89,7 @@ function saveMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     let newTitle = li.querySelector(".edit-title").value.trim();
     let newScore = li.querySelector(".edit-score").value;
-    let newStars = li.querySelectorAll(".stars-container .active").length;
+    let newStars = li.querySelectorAll(".stars-container .star.active").length;
 
     if (newTitle === "" || newScore < 1 || newScore > 10) {
         alert("Ingrese un nombre válido y un puntaje entre 1 y 10.");
@@ -162,7 +163,7 @@ function setupStarRating() {
 
 async function searchMovieFromAPI(title) {
     const apiKey =  'dbd32ea66d8c5fcd290b231b56374d89';// Reemplaza con tu clave de API
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${dbd32ea66d8c5fcd290b231b56374d89}&query=${encodeURIComponent(title)}`;
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
 
     try {
         let response = await fetch(url);
