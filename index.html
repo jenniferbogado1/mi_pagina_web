@@ -114,6 +114,11 @@
     <!-- Películas Vistas -->
     <div id="vistas" class="container">
         <h2>Películas Vistas</h2>
+        <div class="input-container">
+            <input type="text" id="viewedMovieTitle" placeholder="Nombre de la película vista">
+            <input type="number" id="viewedMovieScore" placeholder="Puntaje (1-10)" min="1" max="10">
+            <button onclick="addToViewedList()">Agregar</button>
+        </div>
         <div class="movie-list" id="movieList"></div>
     </div>
 
@@ -135,7 +140,6 @@
                 document.getElementById('agregar').style.display = 'block';
             } else if (hash === 'vistas') {
                 document.getElementById('vistas').style.display = 'block';
-                loadMovies();
             } else {
                 document.getElementById('inicio').style.display = 'block';
             }
@@ -144,41 +148,32 @@
         function addToWatchList() {
             const title = document.getElementById('movieTitle').value;
             const score = document.getElementById('movieScore').value;
-
-            if (title && score >= 1 && score <= 10) {
-                const watchList = document.getElementById('watchList');
+            if (title && score) {
+                const list = document.getElementById('watchList');
                 const item = document.createElement('li');
-                item.innerHTML = `${title} - <span class="stars">${getStars(score)}</span>`;
-                watchList.appendChild(item);
-                
-                // Agregar a Películas Vistas
-                addMovieToVistas(title, score);
-
+                item.textContent = `${title} - Puntaje: ${score}`;
+                list.appendChild(item);
                 document.getElementById('movieTitle').value = '';
                 document.getElementById('movieScore').value = '';
-            } else {
-                alert("Por favor, ingrese un título y un puntaje válido entre 1 y 10.");
             }
         }
 
-        function addMovieToVistas(title, score) {
-            const movieList = document.getElementById('movieList');
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.innerHTML = `
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-                <p>${title}</p>
-                <div class="stars">${getStars(score)}</div>
-            `;
-            movieList.appendChild(card);
-        }
-
-        function getStars(score) {
-            let stars = '';
-            for (let i = 1; i <= 10; i++) {
-                stars += (i <= score) ? '★' : '☆';
+        function addToViewedList() {
+            const title = document.getElementById('viewedMovieTitle').value;
+            const score = document.getElementById('viewedMovieScore').value;
+            if (title && score) {
+                const list = document.getElementById('movieList');
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+                    <p>${title}</p>
+                    <p class="stars">${'⭐'.repeat(score)}${'☆'.repeat(10 - score)}</p>
+                `;
+                list.appendChild(card);
+                document.getElementById('viewedMovieTitle').value = '';
+                document.getElementById('viewedMovieScore').value = '';
             }
-            return stars;
         }
 
         window.addEventListener('hashchange', checkRoute);
