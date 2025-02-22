@@ -99,7 +99,8 @@
         <h2>Agregar Película</h2>
         <div class="input-container">
             <input type="text" id="movieTitle" placeholder="Nombre de la película">
-            <button onclick="addToWatchList()">Agregar</button>
+            <input type="number" id="movieScore" placeholder="Puntaje (1-10)" min="1" max="10">
+            <button onclick="addMovie()">Agregar</button>
         </div>
         <h3>Películas por ver:</h3>
         <ul id="watchList"></ul>
@@ -129,42 +130,50 @@
                 document.getElementById('agregar').style.display = 'block';
             } else if (hash === 'vistas') {
                 document.getElementById('vistas').style.display = 'block';
+                loadMovies();
             } else {
                 document.getElementById('inicio').style.display = 'block';
             }
         }
 
-        function addToWatchList() {
+        function addMovie() {
             const title = document.getElementById('movieTitle').value;
-            if (title) {
-                const list = document.getElementById('watchList');
-                const item = document.createElement('li');
-                item.textContent = title;
-                list.appendChild(item);
+            const score = document.getElementById('movieScore').value;
+
+            if (title && score >= 1 && score <= 10) {
+                let movies = JSON.parse(localStorage.getItem('movies')) || [];
+                let addedDate = new Date().toLocaleDateString();
+                movies.push({ title, score, addedDate });
+                localStorage.setItem('movies', JSON.stringify(movies));
                 document.getElementById('movieTitle').value = '';
+                document.getElementById('movieScore').value = '';
+                loadMovies();
+            } else {
+                alert("Por favor, ingrese un título y un puntaje válido entre 1 y 10.");
             }
         }
 
-        function addMovie(title) {
-            const list = document.getElementById('movieList');
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.innerHTML = `
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-                <p>${title}</p>
-            `;
-            list.appendChild(card);
+        function loadMovies() {
+            const movieList = document.getElementById('movieList');
+            movieList.innerHTML = '';
+            let movies = JSON.parse(localStorage.getItem('movies')) || [];
+
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+                    <p>${movie.title}</p>
+                    <p>Puntaje: ${movie.score}</p>
+                    <p>Agregada el: ${movie.addedDate}</p>
+                `;
+                movieList.appendChild(card);
+            });
         }
 
         window.addEventListener('hashchange', checkRoute);
         window.addEventListener('load', checkRoute);
-
-        // Agregar algunas películas de prueba
-        addMovie("Interstellar");
-        addMovie("Origen");
-        addMovie("El Padrino");
     </script>
 
 </body>
 </html>
-
