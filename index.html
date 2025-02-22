@@ -1,6 +1,4 @@
-
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,96 +9,106 @@
             color: #ffffff;
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .container {
-            display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .input-container, .score-container {
-            display: flex;
-            align-items: center;
-            margin: 10px;
-        }
-        .input-container input, .score-container input {
-            border: 2px solid #f39c12;
-            border-radius: 50px;
-            padding: 10px 20px;
-            width: 250px;
-            margin-left: 10px;
-            text-align: center;
-        }
-        #starRating {
-            display: flex;
             justify-content: center;
-            margin: 10px 0;
-        }
-        #movieList {
-            border: 2px solid #f39c12;
-            border-radius: 10px;
-            background-color: #222;
-            padding: 20px;
-            width: 300px;
-            list-style-type: none;
-            position: absolute;
-            right: 20px;
-            top: 100px;
-        }
-        li {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #333;
-            border-radius: 5px;
-        }
-        .star {
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .active {
-            color: gold;
-        }
-        button {
-            background-color: #f39c12;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #fff;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #d68910;
-        }
-    </style>
+            height: 100vh;
+            margin: 0;
+        }/* Estilo del buscador */
+    #searchInput {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        border: 2px solid #f39c12;
+        border-radius: 50px;
+        padding: 10px 20px;
+        width: 250px;
+        background-color: #fff;
+        color: #000;
+    }
+
+    /* Contenedor principal */
+    .container {
+        text-align: center;
+    }
+
+    /* Input y botones */
+    .input-container, .score-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
+    }
+
+    .input-container input, .score-container input {
+        border: 2px solid #f39c12;
+        border-radius: 50px;
+        padding: 10px 20px;
+        width: 300px;
+        background-color: #fff;
+        color: #000;
+    }
+
+    button {
+        background-color: #f39c12;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Lista de películas */
+    #movieListContainer {
+        border: 4px solid #007bff; /* Azul */
+        border-radius: 15px;
+        background: repeating-linear-gradient(45deg, #0056b3, #007bff 10px);
+        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+        min-height: 200px;
+        margin-top: 20px;
+        overflow-y: auto;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 5px;
+    }
+</style>
+
 </head>
 <body>
-    <div class="container">
-        <div class="input-container">
-            <span>✏️</span>
-            <input type="text" id="movieTitle" placeholder="Nombre de la película">
-        </div>
-
-        <div class="score-container">
-            <span>⭐</span>
-            <input type="number" id="movieScore" min="1" max="10" placeholder="Puntaje (1-10)">
-        </div>
-        
-        <div id="starRating"></div>
-        <button onclick="addMovie()">Agregar Película</button>
-        
-        <input type="text" id="searchInput" placeholder="Buscar película" onkeyup="searchMovies()">
-        
-        <ul id="movieList"></ul>
+    <input type="text" id="searchInput" placeholder="Buscar película" onkeyup="searchMovies()"><div class="container">
+    <div class="input-container">
+        <span>✏️</span>
+        <input type="text" id="movieTitle" placeholder="Nombre de la película">
     </div>
 
-    <script src="script.js"></script>
+    <div class="score-container">
+        <span>⭐</span>
+        <input type="number" id="movieScore" min="1" max="10" placeholder="Puntaje (1-10)">
+    </div>
+
+    <button onclick="addMovie()">Agregar Película</button>
+    
+    <div id="movieListContainer">
+        <ul id="movieList"></ul>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
+
