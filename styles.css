@@ -33,6 +33,17 @@ body {
     margin: 10px 0; 
 }
 
+.star-rating span {
+  font-size: 2em;
+  cursor: pointer;
+  color: #ccc;
+}
+.star-rating span.selected,
+.star-rating span:hover,
+.star-rating span:hover ~ span {
+  color: #f5b301;
+}
+
 button { 
     background-color: #f39c12; 
     color: white;
