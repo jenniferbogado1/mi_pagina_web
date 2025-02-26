@@ -16,10 +16,10 @@ function loadMovies() {
 
         li.innerHTML = `
             <img src="${movie.poster}" alt="Póster de ${movie.title}" class="poster-img">
-	        <span class="popcorn">🍿</span> 
+            <span class="popcorn">🍿</span> 
             <input type="text" value="${movie.title}" class="edit-title" disabled>
-            <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
-            <p>🎯 Puntaje: ${movie.score}/10</p>
+            <div class="stars-container" data-index="${index}">${generateStars(movie.starRating, index)}</div>
+            <p>🎯 Puntaje: <span class="movie-score">${movie.score}</span>/10</p>
             <span>📅 Agregada el: ${movie.addedDate}</span>
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
@@ -94,9 +94,9 @@ function saveMovie(index) {
 }
 
 // Generar estrellas visualmente
-function generateStars(starRating) {
+function generateStars(starRating, index) {
     return Array.from({ length: 5 }, (_, i) =>
-        `<span class="star ${i < starRating ? "active" : ""}" data-value="${i + 1}">★</span>`
+        `<span class="star ${i < starRating ? "active" : ""}" data-value="${i + 1}" data-index="${index}">★</span>`
     ).join("");
 }
 
@@ -105,11 +105,14 @@ function setupStarClickEvents() {
     document.querySelectorAll(".stars-container").forEach(container => {
         container.querySelectorAll(".star").forEach(star => {
             star.addEventListener("click", function () {
-                let index = container.dataset.index;
-                document.querySelectorAll(`li[data-index="${index}"] .star`).forEach(s => s.classList.remove("active"));
-                for (let j = 0; j < this.dataset.value; j++) {
-                    document.querySelectorAll(`li[data-index="${index}"] .star`)[j].classList.add("active");
-                }
+                let index = this.dataset.index;
+                let value = this.dataset.value;
+                
+                let movies = JSON.parse(localStorage.getItem("movies")) || [];
+                movies[index].starRating = parseInt(value);
+                localStorage.setItem("movies", JSON.stringify(movies));
+                
+                loadMovies();
             });
         });
     });
