@@ -14,13 +14,11 @@
            padding: 0;
        }
 
-       /* Contenedores principales */
        .container {
            display: none;
            padding: 20px;
        }
 
-       /* Botones flotantes */
        .floating-buttons {
            position: fixed;
            bottom: 20px;
@@ -39,7 +37,6 @@
            cursor: pointer;
        }
 
-       /* Lista de películas */
        .movie-list {
            display: flex;
            flex-wrap: wrap;
@@ -47,10 +44,9 @@
            gap: 10px;
        }
 
-       /* Estilo de claqueta */
        .movie-card {
            width: 120px;
-           background: #0055a5; /* Azul con patrones de cine */
+           background: #0055a5;
            border-radius: 8px;
            padding: 10px;
            text-align: center;
@@ -65,7 +61,6 @@
            width: 100%;
        }
 
-       /* Sección de Agregar Película */
        .input-container {
            margin-top: 50px;
        }
@@ -88,41 +83,28 @@
 </head>
 <body>
 
-   <!-- Pantalla de bienvenida -->
-
    <div id="inicio" class="container">
        <h1>Bienvenido a Tracker de Películas</h1>
        <p>Selecciona una opción:</p>
    </div>
 
-
-
-
-   <!-- 2da seccion agregar pelicula-->
-
    <div id="agregar" class="container">
        <h2>Agregar Película</h2>
        <div class="input-container">
-           <input type="text" id="movieTitle" placeholder="Nombre de la película">
+           <input type="text" id="movieTitleAgregar" placeholder="Nombre de la película">
            <button onclick="addToWatchList()">Agregar</button>
        </div>
        <h3>Películas por ver:</h3>
        <ul id="watchList"></ul>
    </div>
 
-
-   <!-- 3era seccion Películas Vistas -->
-
    <div id="vistas" class="container">
        <h2>Películas Vistas</h2>
-       <input type="text" id="movieTitle" placeholder="Nombre de la película">
-           <button onclick="addMovie()">Agregar</button>
-
-           <div class="movie-list" id="movieList"></div>
+       <input type="text" id="movieTitleVistas" placeholder="Nombre de la película">
+       <button onclick="addMovie()">Agregar</button>
+       <div class="movie-list" id="movieList"></div>
    </div>
 
-
-   <!-- Botones flotantes -->
    <div class="floating-buttons">
        <button onclick="navigateTo('agregar')">Agregar Película</button>
        <button onclick="navigateTo('vistas')">Películas Vistas</button>
@@ -145,55 +127,35 @@
            }
        }
 
-
-
-      <!-- Dentro de cada elemento de película -->
-
-      <div class="star-rating">
-
-      <span data-value="1">&#9733;</span>
-      <span data-value="2">&#9733;</span>
-      <span data-value="3">&#9733;</span>
-     <span data-value="4">&#9733;</span>
-     <span data-value="5">&#9733;</span>
-    </div>
-
-
-
-
-
        function addToWatchList() {
-           const title = document.getElementById('movieTitle').value;
+           const title = document.getElementById('movieTitleAgregar').value;
            if (title) {
                const list = document.getElementById('watchList');
                const item = document.createElement('li');
                item.textContent = title;
                list.appendChild(item);
-               document.getElementById('movieTitle').value = '';
+               document.getElementById('movieTitleAgregar').value = '';
            }
        }
 
        function addMovie() {
-           const title = document.getElementById('movieTitle').value;
-           const list = document.getElementById('movieList');
-           const card = document.createElement('div');
-           card.className = 'movie-card';
-           card.innerHTML = `
-               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-               <p>${title}</p>
-           `;
-           list.appendChild(card);
+           const title = document.getElementById('movieTitleVistas').value;
+           if (title) {
+               const list = document.getElementById('movieList');
+               const card = document.createElement('div');
+               card.className = 'movie-card';
+               card.innerHTML = `
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+                   <p>${title}</p>
+               `;
+               list.appendChild(card);
+               document.getElementById('movieTitleVistas').value = '';
+           }
        }
 
        window.addEventListener('hashchange', checkRoute);
        window.addEventListener('load', checkRoute);
-
-       // Agregar algunas películas de prueba
-       addMovie("Interstellar");
-       addMovie("Origen");
-       addMovie("El Padrino");
    </script>
 
 </body>
 </html>
- 
