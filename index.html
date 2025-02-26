@@ -37,7 +37,7 @@
            cursor: pointer;
        }
 
-       .movie-list, .watch-list {
+       .movie-list {
            list-style: none;
            padding: 0;
        }
@@ -58,7 +58,7 @@
 
        .star {
            cursor: pointer;
-           font-size: 25px;
+           font-size: 20px;
            color: gold;
        }
 
@@ -77,16 +77,25 @@
    <div id="agregar" class="container">
        <h2>Agregar Película</h2>
        <input type="text" id="movieTitleAgregar" placeholder="Nombre de la película">
-       <div class="stars-container" id="starRating"></div> <!-- Estrellas interactivas -->
-       <button onclick="addMovie()">Agregar</button>
+       <button onclick="addToWatchList()">Agregar</button>
        <h3>Películas por ver:</h3>
-       <ul id="watchList" class="watch-list"></ul>
+       <ul id="watchList"></ul>
    </div>
 
    <div id="vistas" class="container">
        <h2>Películas Vistas</h2>
+       <input type="text" id="movieTitleVistas" placeholder="Nombre de la película">
+       
+       <!-- Selección de estrellas -->
+       <div class="stars-container" id="starRating"></div>
+
+       <!-- Botón para agregar puntaje -->
+       <input type="number" id="movieScore" placeholder="Puntaje (1-10)" min="1" max="10">
+
+       <button onclick="addMovie()">Agregar</button>
+
        <h3>Lista de películas vistas:</h3>
-       <ul id="movieList" class="movie-list"></ul>
+       <ul id="movieList"></ul>
    </div>
 
    <div class="floating-buttons">
@@ -95,12 +104,6 @@
    </div>
 
    <script>
-       document.addEventListener("DOMContentLoaded", function () {
-           checkRoute();
-           generateStarRating();
-           loadMovies();
-       });
-
        function navigateTo(section) {
            window.location.hash = section;
        }
@@ -117,47 +120,25 @@
            }
        }
 
-       function generateStarRating() {
-           const starContainer = document.getElementById("starRating");
-           starContainer.innerHTML = "";
-           for (let i = 1; i <= 5; i++) {
-               let star = document.createElement("span");
-               star.classList.add("star");
-               star.innerHTML = "★";
-               star.dataset.value = i;
-               star.onclick = function () { selectStars(starContainer, i); };
-               starContainer.appendChild(star);
-           }
-       }
-
-       function selectStars(container, value) {
-           let stars = container.querySelectorAll(".star");
-           stars.forEach(star => {
-               if (star.dataset.value <= value) {
-                   star.classList.add("active");
-               } else {
-                   star.classList.remove("active");
-               }
-           });
-       }
-
        function addMovie() {
-           const title = document.getElementById('movieTitleAgregar').value;
+           const title = document.getElementById('movieTitleVistas').value.trim();
            const starRating = document.querySelectorAll('#starRating .star.active').length;
-           const date = new Date().toLocaleDateString();
+           const score = parseInt(document.getElementById('movieScore').value);
 
-           if (!title || starRating === 0) {
-               alert("Debes ingresar un título y seleccionar una calificación.");
+           if (!title || isNaN(score) || score < 1 || score > 10) {
+               alert("Por favor, ingrese un título válido y un puntaje entre 1 y 10.");
                return;
            }
 
            const list = document.getElementById('movieList');
            const item = document.createElement('li');
+           const date = new Date().toLocaleDateString();
 
            item.innerHTML = `
                <div class="movie-card">
                    <input type="text" value="${title}" class="edit-title" disabled>
                    <div class="stars-container">${generateStars(starRating)}</div>
+                   <p>Puntaje: ${score}/10</p>
                    <p>📅 ${date}</p>
                    <button onclick="editMovie(this)">Editar</button>
                    <button onclick="deleteMovie(this)">Eliminar</button>
@@ -165,21 +146,6 @@
            `;
 
            list.appendChild(item);
-           saveMovies();
-       }
-
-       function generateStars(starRating) {
-           let starsHtml = "";
-           for (let i = 1; i <= 5; i++) {
-               starsHtml += `<span class="star ${i <= starRating ? 'active' : ''}" data-value="${i}" onclick="editStars(this)">${i <= starRating ? '★' : '☆'}</span>`;
-           }
-           return starsHtml;
-       }
-
-       function editStars(star) {
-           let container = star.parentElement;
-           let value = star.dataset.value;
-           selectStars(container, value);
            saveMovies();
        }
 
@@ -207,32 +173,45 @@
                movies.push({
                    title: card.querySelector('.edit-title').value,
                    stars: card.querySelectorAll('.star.active').length,
-                   date: card.querySelector('p').textContent.replace('📅 ', '')
+                   score: card.querySelector('p:nth-of-type(1)').textContent.replace('Puntaje: ', '').replace('/10', ''),
+                   date: card.querySelector('p:nth-of-type(2)').textContent.replace('📅 ', '')
                });
            });
            localStorage.setItem('movies', JSON.stringify(movies));
        }
 
-       function loadMovies() {
-           let movies = JSON.parse(localStorage.getItem('movies')) || [];
-           const list = document.getElementById('movieList');
-           list.innerHTML = "";
-           movies.forEach(movie => {
-               const item = document.createElement('li');
-               item.innerHTML = `
-                   <div class="movie-card">
-                       <input type="text" value="${movie.title}" class="edit-title" disabled>
-                       <div class="stars-container">${generateStars(movie.stars)}</div>
-                       <p>📅 ${movie.date}</p>
-                       <button onclick="editMovie(this)">Editar</button>
-                       <button onclick="deleteMovie(this)">Eliminar</button>
-                   </div>
-               `;
-               list.appendChild(item);
-           });
+       function generateStars(starRating) {
+           return Array.from({ length: 5 }, (_, i) =>
+               `<span class="star ${i < starRating ? 'active' : ''}" data-value="${i + 1}">★</span>`
+           ).join("");
+       }
+
+       function setupStarRating() {
+           let starsContainer = document.getElementById("starRating");
+           starsContainer.innerHTML = "";
+
+           for (let i = 1; i <= 5; i++) {
+               let star = document.createElement("span");
+               star.innerHTML = "★";
+               star.classList.add("star");
+               star.dataset.value = i;
+
+               star.addEventListener("click", () => {
+                   document.querySelectorAll("#starRating .star").forEach(s => s.classList.remove("active"));
+                   for (let j = 0; j < i; j++) {
+                       document.querySelectorAll("#starRating .star")[j].classList.add("active");
+                   }
+               });
+
+               starsContainer.appendChild(star);
+           }
        }
 
        window.addEventListener('hashchange', checkRoute);
+       window.addEventListener('load', () => {
+           checkRoute();
+           setupStarRating();
+       });
    </script>
 
 </body>
