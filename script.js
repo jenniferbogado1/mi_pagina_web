@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadMovies();
-    loadWatchList();
     setupStarRating();
 });
 
@@ -32,7 +31,7 @@ function loadMovies() {
     setupStarClickEvents();
 }
 
-// Agregar una película a "Películas Vistas"
+// Agregar una película
 function addMovie() {
     let title = document.getElementById("movieTitle").value.trim();
     let starRating = document.getElementById("starRating").dataset.rating || 0;
@@ -90,7 +89,17 @@ function saveMovie(index) {
     };
 
     localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies();
+
+    // Actualizar visualmente sin recargar
+    li.querySelector(".movie-score").textContent = newScore;
+    li.querySelector(".stars-container").innerHTML = generateStars(newStars, index);
+    
+    // Restaurar botones
+    li.querySelector(".edit-title").disabled = true;
+    li.querySelector("button[onclick^='editMovie']").style.display = "inline-block";
+    li.querySelector("button[onclick^='saveMovie']").style.display = "none";
+
+    setupStarClickEvents(); 
 }
 
 // Generar estrellas visualmente
@@ -112,7 +121,11 @@ function setupStarClickEvents() {
                 movies[index].starRating = parseInt(value);
                 localStorage.setItem("movies", JSON.stringify(movies));
                 
-                loadMovies();
+                // Actualizar visualmente sin recargar
+                let li = document.querySelector(`li[data-index="${index}"]`);
+                li.querySelector(".stars-container").innerHTML = generateStars(value, index);
+                
+                setupStarClickEvents();
             });
         });
     });
