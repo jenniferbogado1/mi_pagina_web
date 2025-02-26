@@ -173,7 +173,8 @@
            }
        }
 
-       function addMovie(title) {
+       function addMovie() {
+           const title = document.getElementById('movieTitle').value;
            const list = document.getElementById('movieList');
            const card = document.createElement('div');
            card.className = 'movie-card';
