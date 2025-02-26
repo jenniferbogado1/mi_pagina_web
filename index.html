@@ -138,21 +138,74 @@
            }
        }
 
-       function addMovie() {
-           const title = document.getElementById('movieTitleVistas').value;
-           if (title) {
-               const list = document.getElementById('movieList');
-               const card = document.createElement('div');
-               card.className = 'movie-card';
-               card.innerHTML = `
-                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-                   <p>${title}</p>
-               `;
-               list.appendChild(card);
-               document.getElementById('movieTitleVistas').value = '';
-           }
-       }
 
+       function addMovie() {
+    const title = document.getElementById('movieTitleVistas').value;
+    if (title) {
+        const list = document.getElementById('movieList');
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+
+        card.innerHTML = `
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+            <input type="text" value="${title}" class="edit-title" disabled>
+            <button onclick="editMovie(this)">Editar</button>
+            <button onclick="deleteMovie(this)">Eliminar</button>
+        `;
+
+        list.appendChild(card);
+        document.getElementById('movieTitleVistas').value = '';
+
+        saveMovies();
+        checkRoute();
+    }
+}
+
+function editMovie(button) {
+    const card = button.parentElement;
+    const input = card.querySelector('.edit-title');
+    if (button.textContent === 'Editar') {
+        input.disabled = false;
+        button.textContent = 'Guardar';
+    } else {
+        input.disabled = true;
+        button.textContent = 'Editar';
+    }
+}
+
+function deleteMovie(button) {
+    const card = button.parentElement;
+    card.remove();
+}
+
+function saveMovies() {
+    const movies = [];
+    document.querySelectorAll('.movie-card').forEach(card => {
+        const title = card.querySelector('.edit-title').value;
+        movies.push(title);
+    });
+    localStorage.setItem('movies', JSON.stringify(movies));
+}
+
+function loadMovies() {
+    const movies = JSON.parse(localStorage.getItem('movies')) || [];
+    movies.forEach(title => {
+        const list = document.getElementById('movieList');
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.innerHTML = `
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+            <input type="text" value="${title}" class="edit-title" disabled>
+            <button onclick="editMovie(this)">Editar</button>
+            <button onclick="deleteMovie(this)">Eliminar</button>
+        `;
+        list.appendChild(card);
+    });
+}
+
+window.addEventListener('beforeunload', saveMovies);
+window.addEventListener('load', loadMovies);
+       
        window.addEventListener('hashchange', checkRoute);
        window.addEventListener('load', checkRoute);
    </script>
