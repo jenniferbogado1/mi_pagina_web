@@ -1,187 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracker de Películas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tracker de Películas</title>
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           background-color: #121212;
+           color: #fff;
+           text-align: center;
+           margin: 0;
+           padding: 0;
+       }
 
-        /* Contenedores principales */
-        .container {
-            display: none;
-            padding: 20px;
-        }
+       /* Contenedores principales */
+       .container {
+           display: none;
+           padding: 20px;
+       }
 
-        /* Botones flotantes */
-        .floating-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-        }
+       /* Botones flotantes */
+       .floating-buttons {
+           position: left;
+           bottom: 20px;
+           right: 20px;
+           display: flex;
+           flex-direction: column;
+       }
 
-        .floating-buttons button {
-            background-color: #f39c12;
-            color: #fff;
-            border: none;
-            padding: 15px;
-            margin: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+       .floating-buttons button {
+           background-color: #f39c12;
+           color: #fff;
+           border: none;
+           padding: 15px;
+           margin: 5px;
+           border-radius: 10px;
+           cursor: pointer;
+       }
 
-        /* Lista de películas */
-        .movie-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
+       /* Lista de películas */
+       .movie-list {
+           display: flex;
+           flex-wrap: wrap;
+           justify-content: center;
+           gap: 10px;
+       }
 
-        /* Estilo de claqueta */
-        .movie-card {
-            width: 120px;
-            background: #0055a5; /* Azul con patrones de cine */
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            color: white;
-            font-size: 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+       /* Estilo de claqueta */
+       .movie-card {
+           width: 120px;
+           background: #0055a5; /* Azul con patrones de cine */
+           border-radius: 8px;
+           padding: 10px;
+           text-align: center;
+           color: white;
+           font-size: 14px;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+       }
 
-        .movie-card img {
-            width: 100%;
-        }
+       .movie-card img {
+           width: 100%;
+       }
 
-        /* Sección de Agregar Película */
-        .input-container {
-            margin-top: 50px;
-        }
+       /* Sección de Agregar Película */
+       .input-container {
+           margin-top: 50px;
+       }
 
-        input {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-        }
+       input {
+           padding: 10px;
+           border-radius: 5px;
+           border: none;
+       }
 
-        button {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            background-color: #f39c12;
-            color: white;
-            cursor: pointer;
-        }
-    </style>
+       button {
+           padding: 10px;
+           border-radius: 5px;
+           border: none;
+           background-color: #f39c12;
+           color: white;
+           cursor: pointer;
+       }
+   </style>
 </head>
 <body>
 
-    <!-- Pantalla de bienvenida -->
+   <!-- Pantalla de bienvenida -->
 
-    <div id="inicio" class="container">
-        <h1>Bienvenido a Tracker de Películas</h1>
-        <p>Selecciona una opción:</p>
+   <div id="inicio" class="container">
+       <h1>Bienvenido a Tracker de Películas</h1>
+       <p>Selecciona una opción:</p>
+   </div>
+
+
+
+
+   <!-- 2da seccion agregar pelicula-->
+
+   <div id="agregar" class="container">
+       <h2>Agregar Película</h2>
+       <div class="input-container">
+           <input type="text" id="movieTitle" placeholder="Nombre de la película">
+           <button onclick="addToWatchList()">Agregar</button>
+       </div>
+       <h3>Películas por ver:</h3>
+       <ul id="watchList"></ul>
+   </div>
+
+
+   <!-- 3era seccion Películas Vistas -->
+
+   <div id="vistas" class="container">
+       <h2>Películas Vistas</h2>
+       <input type="text" id="movieTitle" placeholder="Nombre de la película">
+           <button onclick="addMovie()">Agregar</button>
+
+           <div class="movie-list" id="movieList"></div>
+   </div>
+
+
+   <!-- Botones flotantes -->
+   <div class="floating-buttons">
+       <button onclick="navigateTo('agregar')">Agregar Película</button>
+       <button onclick="navigateTo('vistas')">Películas Vistas</button>
+   </div>
+
+   <script>
+       function navigateTo(section) {
+           window.location.hash = section;
+       }
+
+       function checkRoute() {
+           const hash = window.location.hash.substring(1);
+           document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
+           if (hash === 'agregar') {
+               document.getElementById('agregar').style.display = 'block';
+           } else if (hash === 'vistas') {
+               document.getElementById('vistas').style.display = 'block';
+           } else {
+               document.getElementById('inicio').style.display = 'block';
+           }
+       }
+
+
+
+      <!-- Dentro de cada elemento de película -→
+
+      <div class="star-rating">
+
+      <span data-value="1">&#9733;</span>
+      <span data-value="2">&#9733;</span>
+      <span data-value="3">&#9733;</span>
+     <span data-value="4">&#9733;</span>
+     <span data-value="5">&#9733;</span>
     </div>
 
 
-<!-- Dentro de cada elemento de película -->
-<div class="star-rating">
-  <span data-value="1">&#9733;</span>
-  <span data-value="2">&#9733;</span>
-  <span data-value="3">&#9733;</span>
-  <span data-value="4">&#9733;</span>
-  <span data-value="5">&#9733;</span>
-</div>
-
-    <!-- 2da seccion agregar pelicula-->
-
-    <div id="agregar" class="container">
-        <h2>Agregar Película</h2>
-        <div class="input-container">
-            <input type="text" id="movieTitle" placeholder="Nombre de la película">
-            <button onclick="addToWatchList()">Agregar</button>
-        </div>
-        <h3>Películas por ver:</h3>
-        <ul id="watchList"></ul>
-    </div>
 
 
-    <!-- 3era seccion Películas Vistas -->
 
-    <div id="vistas" class="container">
-        <h2>Películas Vistas</h2>
-        <input type="text" id="movieTitle" placeholder="Nombre de la película">
-            <button onclick="addMovie()">Agregar</button>
+       function addToWatchList() {
+           const title = document.getElementById('movieTitle').value;
+           if (title) {
+               const list = document.getElementById('watchList');
+               const item = document.createElement('li');
+               item.textContent = title;
+               list.appendChild(item);
+               document.getElementById('movieTitle').value = '';
+           }
+       }
 
-            <div class="movie-list" id="movieList"></div>
-    </div>
+       function addMovie(title) {
+           const list = document.getElementById('movieList');
+           const card = document.createElement('div');
+           card.className = 'movie-card';
+           card.innerHTML = `
+               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+               <p>${title}</p>
+           `;
+           list.appendChild(card);
+       }
 
+       window.addEventListener('hashchange', checkRoute);
+       window.addEventListener('load', checkRoute);
 
-    <!-- Botones flotantes -->
-    <div class="floating-buttons">
-        <button onclick="navigateTo('agregar')">Agregar Película</button>
-        <button onclick="navigateTo('vistas')">Películas Vistas</button>
-    </div>
-
-    <script>
-        function navigateTo(section) {
-            window.location.hash = section;
-        }
-
-        function checkRoute() {
-            const hash = window.location.hash.substring(1);
-            document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
-            if (hash === 'agregar') {
-                document.getElementById('agregar').style.display = 'block';
-            } else if (hash === 'vistas') {
-                document.getElementById('vistas').style.display = 'block';
-            } else {
-                document.getElementById('inicio').style.display = 'block';
-            }
-        }
-
-        function addToWatchList() {
-            const title = document.getElementById('movieTitle').value;
-            if (title) {
-                const list = document.getElementById('watchList');
-                const item = document.createElement('li');
-                item.textContent = title;
-                list.appendChild(item);
-                document.getElementById('movieTitle').value = '';
-            }
-        }
-
-        function addMovie(title) {
-            const list = document.getElementById('movieList');
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.innerHTML = `
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-                <p>${title}</p>
-            `;
-            list.appendChild(card);
-        }
-
-        window.addEventListener('hashchange', checkRoute);
-        window.addEventListener('load', checkRoute);
-
-        // Agregar algunas películas de prueba
-        addMovie("Interstellar");
-        addMovie("Origen");
-        addMovie("El Padrino");
-    </script>
+       // Agregar algunas películas de prueba
+       addMovie("Interstellar");
+       addMovie("Origen");
+       addMovie("El Padrino");
+   </script>
 
 </body>
 </html>
+ 
