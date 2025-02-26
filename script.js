@@ -17,8 +17,10 @@ function loadMovies() {
             <img src="${movie.poster}" alt="Póster de ${movie.title}" class="poster-img">
             <span class="popcorn">🍿</span> 
             <input type="text" value="${movie.title}" class="edit-title" disabled>
-            <div class="stars-container" data-index="${index}">${generateStars(movie.starRating, index)}</div>
-            <p>🎯 Puntaje: <span class="movie-score">${movie.score}</span>/10</p>
+            <div class="stars-container" data-index="${index}" data-editable="false">
+                ${generateStars(movie.starRating, index)}
+            </div>
+            <p>🎯 Puntaje: <span class="movie-score">${movie.starRating}</span>/5</p>
             <span>📅 Agregada el: ${movie.addedDate}</span>
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
@@ -35,17 +37,16 @@ function loadMovies() {
 function addMovie() {
     let title = document.getElementById("movieTitle").value.trim();
     let starRating = document.getElementById("starRating").dataset.rating || 0;
-    let score = parseInt(prompt("¿Qué puntaje le das a la película? (1-10)"));
     let poster = document.querySelector("#posterPreview img")?.src || ""; 
 
-    if (title === "" || isNaN(score) || score < 1 || score > 10) {
-        alert("Por favor, ingrese un título válido y un puntaje entre 1 y 10.");
+    if (title === "") {
+        alert("Por favor, ingrese un título válido.");
         return;
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
     let addedDate = new Date().toLocaleDateString();
-    movies.push({ title, starRating: parseInt(starRating), score, addedDate, poster });
+    movies.push({ title, starRating: parseInt(starRating), addedDate, poster });
     localStorage.setItem("movies", JSON.stringify(movies));
 
     document.getElementById("movieTitle").value = "";
@@ -59,7 +60,7 @@ function addMovie() {
 function editMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     li.querySelector(".edit-title").disabled = false;
-    li.querySelector(".stars-container").dataset.editing = "true";
+    li.querySelector(".stars-container").dataset.editable = "true";
     li.querySelector("button[onclick^='editMovie']").style.display = "none";
     li.querySelector("button[onclick^='saveMovie']").style.display = "inline-block";
 }
@@ -69,21 +70,18 @@ function saveMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     let newTitle = li.querySelector(".edit-title").value.trim();
     let newStars = li.querySelectorAll(".stars-container .star.active").length;
-    let newScore = parseInt(prompt("Ingrese el nuevo puntaje (1-10):"));
 
-    if (newTitle === "" || isNaN(newScore) || newScore < 1 || newScore > 10) {
-        alert("Datos inválidos.");
+    if (newTitle === "") {
+        alert("El título no puede estar vacío.");
         return;
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    
     let originalDate = movies[index].addedDate || new Date().toLocaleDateString();
 
     movies[index] = { 
         title: newTitle, 
         starRating: newStars, 
-        score: newScore,
         addedDate: originalDate,
         poster: movies[index].poster 
     };
@@ -91,15 +89,15 @@ function saveMovie(index) {
     localStorage.setItem("movies", JSON.stringify(movies));
 
     // Actualizar visualmente sin recargar
-    li.querySelector(".movie-score").textContent = newScore;
-    li.querySelector(".stars-container").innerHTML = generateStars(newStars, index);
+    li.querySelector(".movie-score").textContent = newStars;
+    li.querySelector(".stars-container").dataset.editable = "false";
     
     // Restaurar botones
     li.querySelector(".edit-title").disabled = true;
     li.querySelector("button[onclick^='editMovie']").style.display = "inline-block";
     li.querySelector("button[onclick^='saveMovie']").style.display = "none";
 
-    setupStarClickEvents(); 
+    setupStarClickEvents();
 }
 
 // Generar estrellas visualmente
@@ -112,22 +110,24 @@ function generateStars(starRating, index) {
 // Activar selección de estrellas
 function setupStarClickEvents() {
     document.querySelectorAll(".stars-container").forEach(container => {
-        container.querySelectorAll(".star").forEach(star => {
-            star.addEventListener("click", function () {
-                let index = this.dataset.index;
-                let value = this.dataset.value;
-                
-                let movies = JSON.parse(localStorage.getItem("movies")) || [];
-                movies[index].starRating = parseInt(value);
-                localStorage.setItem("movies", JSON.stringify(movies));
-                
-                // Actualizar visualmente sin recargar
-                let li = document.querySelector(`li[data-index="${index}"]`);
-                li.querySelector(".stars-container").innerHTML = generateStars(value, index);
-                
-                setupStarClickEvents();
+        if (container.dataset.editable === "true") {
+            container.querySelectorAll(".star").forEach(star => {
+                star.addEventListener("click", function () {
+                    let index = this.dataset.index;
+                    let value = this.dataset.value;
+
+                    let li = document.querySelector(`li[data-index="${index}"]`);
+                    li.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+
+                    for (let j = 0; j < value; j++) {
+                        li.querySelectorAll(".star")[j].classList.add("active");
+                    }
+
+                    // Actualizar visualmente el puntaje
+                    li.querySelector(".movie-score").textContent = value;
+                });
             });
-        });
+        }
     });
 }
 
