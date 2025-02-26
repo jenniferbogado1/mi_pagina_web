@@ -19,7 +19,8 @@ function loadMovies() {
 	        <span class="popcorn">🍿</span> 
             <input type="text" value="${movie.title}" class="edit-title" disabled>
             <div class="stars-container" data-index="${index}">${generateStars(movie.starRating)}</div>
-            <span>Agregada el: ${movie.addedDate}</span>
+            <p>🎯 Puntaje: ${movie.score}/10</p>
+            <span>📅 Agregada el: ${movie.addedDate}</span>
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
             <button onclick="deleteMovie(${index})">Eliminar</button>
@@ -31,40 +32,21 @@ function loadMovies() {
     setupStarClickEvents();
 }
 
-// Cargar lista de películas por ver
-function loadWatchList() {
-    let watchList = document.getElementById("watchList");
-    watchList.innerHTML = "";
-    let movies = JSON.parse(localStorage.getItem("watchList")) || [];
-
-    movies.forEach((movie, index) => {
-        let li = document.createElement("li");
-        li.dataset.index = index;
-        li.innerHTML = `
-            <input type="text" value="${movie.title}" class="edit-title" disabled>
-            <button onclick="editWatchMovie(${index})">Editar</button>
-            <button onclick="saveWatchMovie(${index})" style="display:none;">Guardar</button>
-            <button onclick="deleteWatchMovie(${index})">Eliminar</button>
-        `;
-
-        watchList.appendChild(li);
-    });
-}
-
 // Agregar una película a "Películas Vistas"
 function addMovie() {
     let title = document.getElementById("movieTitle").value.trim();
     let starRating = document.getElementById("starRating").dataset.rating || 0;
+    let score = parseInt(prompt("¿Qué puntaje le das a la película? (1-10)"));
     let poster = document.querySelector("#posterPreview img")?.src || ""; 
 
-    if (title === "") {
-        alert("Por favor, ingrese un nombre válido.");
+    if (title === "" || isNaN(score) || score < 1 || score > 10) {
+        alert("Por favor, ingrese un título válido y un puntaje entre 1 y 10.");
         return;
     }
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
     let addedDate = new Date().toLocaleDateString();
-    movies.push({ title, starRating: parseInt(starRating), addedDate, poster });
+    movies.push({ title, starRating: parseInt(starRating), score, addedDate, poster });
     localStorage.setItem("movies", JSON.stringify(movies));
 
     document.getElementById("movieTitle").value = "";
@@ -72,39 +54,6 @@ function addMovie() {
     document.getElementById("posterPreview").innerHTML = ""; 
 
     loadMovies();
-}
-
-// Agregar una película a "Por Ver"
-function addToWatchList() {
-    let title = document.getElementById("movieTitle").value.trim();
-
-    if (title === "") {
-        alert("Por favor, ingrese un nombre válido.");
-        return;
-    }
-
-    let movies = JSON.parse(localStorage.getItem("watchList")) || [];
-    movies.push({ title });
-    localStorage.setItem("watchList", JSON.stringify(movies));
-
-    document.getElementById("movieTitle").value = "";
-    loadWatchList();
-}
-
-// Eliminar películas vistas
-function deleteMovie(index) {
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies.splice(index, 1);
-    localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies();
-}
-
-// Eliminar películas por ver
-function deleteWatchMovie(index) {
-    let movies = JSON.parse(localStorage.getItem("watchList")) || [];
-    movies.splice(index, 1);
-    localStorage.setItem("watchList", JSON.stringify(movies));
-    loadWatchList();
 }
 
 // Editar película vista
@@ -121,9 +70,10 @@ function saveMovie(index) {
     let li = document.querySelector(`li[data-index="${index}"]`);
     let newTitle = li.querySelector(".edit-title").value.trim();
     let newStars = li.querySelectorAll(".stars-container .star.active").length;
+    let newScore = parseInt(prompt("Ingrese el nuevo puntaje (1-10):"));
 
-    if (newTitle === "") {
-        alert("Ingrese un nombre válido.");
+    if (newTitle === "" || isNaN(newScore) || newScore < 1 || newScore > 10) {
+        alert("Datos inválidos.");
         return;
     }
 
@@ -134,37 +84,13 @@ function saveMovie(index) {
     movies[index] = { 
         title: newTitle, 
         starRating: newStars, 
+        score: newScore,
         addedDate: originalDate,
         poster: movies[index].poster 
     };
 
     localStorage.setItem("movies", JSON.stringify(movies));
     loadMovies();
-}
-
-// Editar película de "Por Ver"
-function editWatchMovie(index) {
-    let li = document.querySelector(`li[data-index="${index}"]`);
-    li.querySelector(".edit-title").disabled = false;
-    li.querySelector("button[onclick^='editWatchMovie']").style.display = "none";
-    li.querySelector("button[onclick^='saveWatchMovie']").style.display = "inline-block";
-}
-
-// Guardar edición de película "Por Ver"
-function saveWatchMovie(index) {
-    let li = document.querySelector(`li[data-index="${index}"]`);
-    let newTitle = li.querySelector(".edit-title").value.trim();
-
-    if (newTitle === "") {
-        alert("Ingrese un nombre válido.");
-        return;
-    }
-
-    let movies = JSON.parse(localStorage.getItem("watchList")) || [];
-    movies[index].title = newTitle;
-
-    localStorage.setItem("watchList", JSON.stringify(movies));
-    loadWatchList();
 }
 
 // Generar estrellas visualmente
