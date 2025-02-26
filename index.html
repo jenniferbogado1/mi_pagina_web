@@ -79,6 +79,20 @@
            color: white;
            cursor: pointer;
        }
+
+       .stars-container {
+           margin: 10px 0;
+       }
+
+       .star {
+           cursor: pointer;
+           font-size: 20px;
+           color: gold;
+       }
+
+       .star.active {
+           color: orange;
+       }
    </style>
 </head>
 <body>
@@ -92,6 +106,7 @@
        <h2>Agregar Película</h2>
        <div class="input-container">
            <input type="text" id="movieTitleAgregar" placeholder="Nombre de la película">
+           <div class="stars-container" id="starRatingAgregar"></div>
            <button onclick="addToWatchList()">Agregar</button>
        </div>
        <h3>Películas por ver:</h3>
@@ -138,76 +153,99 @@
            }
        }
 
-
        function addMovie() {
-    const title = document.getElementById('movieTitleVistas').value;
-    if (title) {
-        const list = document.getElementById('movieList');
-        const card = document.createElement('div');
-        card.className = 'movie-card';
+           const title = document.getElementById('movieTitleVistas').value;
+           if (title) {
+               const list = document.getElementById('movieList');
+               const card = document.createElement('div');
+               card.className = 'movie-card';
 
-        card.innerHTML = `
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-            <input type="text" value="${title}" class="edit-title" disabled>
-            <button onclick="editMovie(this)">Editar</button>
-            <button onclick="deleteMovie(this)">Eliminar</button>
-        `;
+               card.innerHTML = `
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+                   <input type="text" value="${title}" class="edit-title" disabled>
+                   <button onclick="editMovie(this)">Editar</button>
+                   <button onclick="deleteMovie(this)">Eliminar</button>
+               `;
 
-        list.appendChild(card);
-        document.getElementById('movieTitleVistas').value = '';
+               list.appendChild(card);
+               document.getElementById('movieTitleVistas').value = '';
 
-        saveMovies();
-        checkRoute();
-    }
-}
+               saveMovies();
+               checkRoute();
+           }
+       }
 
-function editMovie(button) {
-    const card = button.parentElement;
-    const input = card.querySelector('.edit-title');
-    if (button.textContent === 'Editar') {
-        input.disabled = false;
-        button.textContent = 'Guardar';
-    } else {
-        input.disabled = true;
-        button.textContent = 'Editar';
-    }
-}
+       function editMovie(button) {
+           const card = button.parentElement;
+           const input = card.querySelector('.edit-title');
+           if (button.textContent === 'Editar') {
+               input.disabled = false;
+               button.textContent = 'Guardar';
+           } else {
+               input.disabled = true;
+               button.textContent = 'Editar';
+           }
+       }
 
-function deleteMovie(button) {
-    const card = button.parentElement;
-    card.remove();
-}
+       function deleteMovie(button) {
+           const card = button.parentElement;
+           card.remove();
+       }
 
-function saveMovies() {
-    const movies = [];
-    document.querySelectorAll('.movie-card').forEach(card => {
-        const title = card.querySelector('.edit-title').value;
-        movies.push(title);
-    });
-    localStorage.setItem('movies', JSON.stringify(movies));
-}
+       function saveMovies() {
+           const movies = [];
+           document.querySelectorAll('.movie-card').forEach(card => {
+               const title = card.querySelector('.edit-title').value;
+               movies.push(title);
+           });
+           localStorage.setItem('movies', JSON.stringify(movies));
+       }
 
-function loadMovies() {
-    const movies = JSON.parse(localStorage.getItem('movies')) || [];
-    movies.forEach(title => {
-        const list = document.getElementById('movieList');
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        card.innerHTML = `
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
-            <input type="text" value="${title}" class="edit-title" disabled>
-            <button onclick="editMovie(this)">Editar</button>
-            <button onclick="deleteMovie(this)">Eliminar</button>
-        `;
-        list.appendChild(card);
-    });
-}
+       function loadMovies() {
+           const movies = JSON.parse(localStorage.getItem('movies')) || [];
+           movies.forEach(title => {
+               const list = document.getElementById('movieList');
+               const card = document.createElement('div');
+               card.className = 'movie-card';
+               card.innerHTML = `
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Clapboard.svg/120px-Clapboard.svg.png" alt="Claqueta">
+                   <input type="text" value="${title}" class="edit-title" disabled>
+                   <button onclick="editMovie(this)">Editar</button>
+                   <button onclick="deleteMovie(this)">Eliminar</button>
+               `;
+               list.appendChild(card);
+           });
+       }
 
-window.addEventListener('beforeunload', saveMovies);
-window.addEventListener('load', loadMovies);
+       window.addEventListener('beforeunload', saveMovies);
+       window.addEventListener('load', loadMovies);
        
        window.addEventListener('hashchange', checkRoute);
        window.addEventListener('load', checkRoute);
+
+       // Estrellas para calificación
+       function setupStarRating() {
+           const starsContainer = document.getElementById('starRatingAgregar');
+           starsContainer.innerHTML = '';
+
+           for (let i = 1; i <= 5; i++) {
+               const star = document.createElement('span');
+               star.innerHTML = "★";
+               star.classList.add('star');
+               star.dataset.value = i;
+
+               star.addEventListener('click', () => {
+                   document.querySelectorAll('#starRatingAgregar .star').forEach(s => s.classList.remove('active'));
+                   for (let j = 0; j < i; j++) {
+                       document.querySelectorAll('#starRatingAgregar .star')[j].classList.add('active');
+                   }
+               });
+
+               starsContainer.appendChild(star);
+           }
+       }
+
+       setupStarRating();
    </script>
 
 </body>
