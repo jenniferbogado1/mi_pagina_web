@@ -1,12 +1,5 @@
 
-       body {
-           font-family: Arial, sans-serif;
-           background-color: lightgray;
-           color: #fff;
-           text-align: center;
-           margin: 0;
-           padding: 0;
-       }
+  
 
        .container {
            display: none;
@@ -61,7 +54,7 @@
        }
 
 body { 
-    background-color: #121212;
+    background-color: lightgray;
     color: #ffffff; 
     font-family: Arial, sans-serif; 
     display: flex; 
