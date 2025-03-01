@@ -33,20 +33,75 @@ body {
            cursor: pointer;
        }
 
-       .movie-list {
-           list-style: none;
-           padding: 0;
-       }
+       /* Contenedor de películas */
+.movies-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
 
-       .movie-card {
-           background: #0055a5;
-           border-radius: 8px;
-           padding: 10px;
-           text-align: center;
-           color: white;
-           margin: 10px auto;
-           max-width: 300px;
-       }
+/* Tarjeta de película estilo claqueta */
+.movie-card {
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    border: 4px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Diseño del título de la película */
+.movie-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Diseño del puntaje */
+.movie-rating {
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Diseño de estrellas */
+.movie-stars {
+    font-size: 20px;
+    text-align: center;
+}
+
+/* Comentario */
+.movie-comment {
+    font-style: italic;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Fecha de la película */
+.movie-date {
+    font-size: 12px;
+    text-align: right;
+    margin-top: 10px;
+}
+
+/* Botones de edición y eliminación */
+.movie-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
 
        .stars-container {
            margin: 10px 0;
