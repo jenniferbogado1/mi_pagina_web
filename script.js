@@ -193,6 +193,17 @@ function loadMovies() {
     setupStarClickEvents();
 }
 
+function loadSection(section) {
+    fetch(`${section}.html`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("content").innerHTML = html;
+            setupStarRating(); // Asegura que las estrellas funcionen
+            checkRoute(); // Verifica la sección activa
+        })
+        .catch(error => console.log("Error al cargar la sección: ", error));
+}
+
 
 
 // Activar selección de estrellas
