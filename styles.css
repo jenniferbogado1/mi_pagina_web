@@ -186,10 +186,10 @@ p {
 
 /* Opciones del menú */
 .menu-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
     gap: 15px;
+    justify-items: center;
 }
 
 .menu-item {
