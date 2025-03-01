@@ -1,4 +1,13 @@
-
+body { 
+    background-color: red;
+    color: #ffffff; 
+    font-family: Arial, sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
+    height: 100vh; 
+    margin: 0; 
+}
   
 
        .container {
@@ -53,16 +62,7 @@
            color: orange;
        }
 
-body { 
-    background-color: lightgray;
-    color: #ffffff; 
-    font-family: Arial, sans-serif; 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; 
-    height: 100vh; 
-    margin: 0; 
-}
+
 
 
 .input-container, .score-container 
