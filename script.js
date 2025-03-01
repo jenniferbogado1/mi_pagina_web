@@ -205,6 +205,10 @@ function loadSection(section) {
 }
 
 
+function navigateTo(page) {
+    window.location.href = page;
+}
+
 
 // Activar selección de estrellas
 function setupStarClickEvents() {
