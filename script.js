@@ -20,51 +20,55 @@ document.addEventListener("DOMContentLoaded", () => {
        }
 
        function addMovie() {
-           const title = document.getElementById('movieTitleVistas').value.trim();
-           const starRating = document.querySelectorAll('#starRating .star.active').length;
-           const score = parseInt(document.getElementById('movieScore').value);
+    let title = document.getElementById("movieTitleVistas").value;
+    let score = document.getElementById("movieScore").value;
+    
+    if (title.trim() === "" || score.trim() === "") {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
 
-           if (!title || isNaN(score) || score < 1 || score > 10) {
-               alert("Por favor, ingrese un título válido y un puntaje entre 1 y 10.");
-               return;
-           }
+    let stars = "⭐".repeat(Math.round(score / 2)); // Estrellas basadas en puntaje
+    let today = new Date().toLocaleDateString();
 
-           const list = document.getElementById('movieList');
-           const item = document.createElement('li');
-           const date = new Date().toLocaleDateString();
+    let movieHTML = `
+        <div class="movie-card">
+            <div class="movie-title">${title}</div>
+            <div class="movie-rating">${score}/10</div>
+            <div class="movie-stars">${stars}</div>
+            <div class="movie-comment">"Comentario aquí"</div>
+            <div class="movie-date">${today}</div>
+            <div class="movie-actions">
+                <button class="edit-btn" onclick="editMovie(this)">✏️</button>
+                <button class="delete-btn" onclick="deleteMovie(this)">🗑️</button>
+            </div>
+        </div>
+    `;
 
-           item.innerHTML = `
-               <div class="movie-card">
-                   <input type="text" value="${title}" class="edit-title" disabled>
-                   <div class="stars-container">${generateStars(starRating)}</div>
-                   <p>Puntaje: ${score}/10</p>
-                   <p>📅 ${date}</p>
-                   <button onclick="editMovie(this)">Editar</button>
-                   <button onclick="deleteMovie(this)">Eliminar</button>
-               </div>
-           `;
+    document.querySelector(".movies-container").innerHTML += movieHTML;
 
-           list.appendChild(item);
-           saveMovies();
-       }
+    // Limpiar campos
+    document.getElementById("movieTitleVistas").value = "";
+    document.getElementById("movieScore").value = "";
+}
 
-       function editMovie(button) {
-           const card = button.parentElement;
-           const input = card.querySelector('.edit-title');
-           if (button.textContent === 'Editar') {
-               input.disabled = false;
-               button.textContent = 'Guardar';
-           } else {
-               input.disabled = true;
-               button.textContent = 'Editar';
-               saveMovies();
-           }
-       }
+// Función para eliminar película
+function deleteMovie(button) {
+    button.parentElement.parentElement.remove();
+}
 
-       function deleteMovie(button) {
-           button.parentElement.remove();
-           saveMovies();
-       }
+// Función para editar película
+function editMovie(button) {
+    let movieCard = button.parentElement.parentElement;
+    let title = prompt("Editar título:", movieCard.querySelector(".movie-title").innerText);
+    let score = prompt("Editar puntaje (1-10):", movieCard.querySelector(".movie-rating").innerText.split("/")[0]);
+
+    if (title && score) {
+        movieCard.querySelector(".movie-title").innerText = title;
+        movieCard.querySelector(".movie-rating").innerText = `${score}/10`;
+        movieCard.querySelector(".movie-stars").innerText = "⭐".repeat(Math.round(score / 2));
+    }
+}
 
        function saveMovies() {
            let movies = [];
