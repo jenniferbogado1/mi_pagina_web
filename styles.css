@@ -1,39 +1,86 @@
-body { 
+/* Reset básico */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
     background-color: lightgray;
-    color: #ffffff; 
-    font-family: Arial, Helvetica, sans-serif; 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; 
-    height: 100vh; 
-    margin: 0; 
 }
-  
 
-       .container {
-           display: none;
-           padding: 20px;
-       }
+/* Fondo con imagen */
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.imgur.com/QbnbjGq.jpeg') no-repeat center center/cover;
+    z-index: -1;
+}
 
-       .floating-buttons {
-           position: fixed;
-           bottom: 20px;
-           right: 20px;
-           display: flex;
-           flex-direction: column;
-       }
+/* Contenedor principal */
+.container {
+    display: none;
+    padding: 20px;
+}
 
-       .floating-buttons button {
-           background-color: #f39c12;
-           color: #fff;
-           border: none;
-           padding: 15px;
-           margin: 5px;
-           border-radius: 10px;
-           cursor: pointer;
-       }
+/* ---- Menú ---- */
+.menu-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    width: 350px;
+}
 
-       /* Contenedor de películas */
+h1 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Opciones del menú */
+.menu-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    justify-items: center;
+}
+
+.menu-item {
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-item img {
+    width: 50px;
+    height: 50px;
+}
+
+.menu-item span {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* ---- Películas ---- */
 .movies-container {
     display: flex;
     flex-direction: column;
@@ -103,173 +150,105 @@ body {
     cursor: pointer;
 }
 
-       .stars-container {
-           margin: 10px 0;
-       }
-
-       .star {
-           cursor: pointer;
-           font-size: 20px;
-           color: gold;
-       }
-
-       .star.active {
-           color: orange;
-       }
-
-
-
-
-.input-container, .score-container 
-{ 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin: 20px; 
-}
-
-.input-container input, .score-container input 
-{
-    border: 2px solid #f39c12; 
-    border-radius: 50px; 
-    padding: 10px 20px; 
-    width: 300px; 
-    margin-left: 10px;
-}
-
-#starRating { 
-    display: flex; 
-    justify-content: center; 
-    margin: 10px 0; 
-}
-
-.star-rating span {
-  font-size: 2em;
-  cursor: pointer;
-  color: #ccc;
-}
-.star-rating span.selected,
-.star-rating span:hover,
-.star-rating span:hover ~ span {
-  color: #f5b301;
-}
-
-button { 
-    background-color: #f39c12; 
-    color: white;
-    border: none; 
-    padding: 10px 20px;
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    display: block; 
-    margin: 10px auto; 
-}
-
-button:hover { 
-    background-color: #d68910; 
-}
-
-#movieList { 
-    border: 2px solid #f39c12; 
-    border-radius: 10px; 
-    background-color: #222; 
-    padding: 20px; 
-    width: 300px; 
-    list-style-type: none; 
-    position: absolute; 
-    right: 20px; 
-    top: 100px; }
-
-li { display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    margin: 10px 0; 
-    padding: 10px; 
-    background-color: #333; 
-    border-radius: 5px; }
-
-.star { font-size: 20px; 
-       cursor: pointer; }
-
-.active { color: gold; }
-
-.popcorn { margin-right: 5px; }
-
-/* menu */
-
-/* Fondo con efecto */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    color: white;
-    text-align: center;
-}
-
-.background {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: url('https://i.imgur.com/QbnbjGq.jpeg') no-repeat center center/cover;
-    z-index: -1;
-}
-
-/* Contenedor del menú */
-.menu-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    width: 350px;
-}
-
-h1 {
-    font-size: 24px;
+/* ---- Estrellas ---- */
+.stars-container {
+    display: flex;
+    justify-content: center;
     margin: 10px 0;
 }
 
-p {
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* Opciones del menú */
-.menu-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    gap: 15px;
-    justify-items: center;
-}
-
-.menu-item {
-    width: 45%;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
+.star {
     cursor: pointer;
-    transition: 0.3s;
+    font-size: 20px;
+    color: gold;
+}
+
+.star.active {
+    color: orange;
+}
+
+.star-rating span {
+    font-size: 2em;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.star-rating span.selected,
+.star-rating span:hover,
+.star-rating span:hover ~ span {
+    color: #f5b301;
+}
+
+/* ---- Inputs y botones ---- */
+.input-container, .score-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+.input-container input, .score-container input {
+    border: 2px solid #f39c12;
+    border-radius: 50px;
+    padding: 10px 20px;
+    width: 300px;
+    margin-left: 10px;
+}
+
+button {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 10px auto;
+}
+
+button:hover {
+    background-color: #d68910;
+}
+
+/* ---- Floating Buttons ---- */
+.floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
+}
+
+.floating-buttons button {
+    background-color: #f39c12;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* ---- Lista de películas ---- */
+#movieList {
+    border: 2px solid #f39c12;
+    border-radius: 10px;
+    background-color: #222;
+    padding: 20px;
+    width: 300px;
+    list-style-type: none;
+    position: absolute;
+    right: 20px;
+    top: 100px;
+}
+
+li {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
 }
-
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.menu-item img {
-    width: 50px;
-    height: 50px;
-}
-
-.menu-item span {
-    margin-top: 5px;
-    font-size: 14px;
-}
-
-
