@@ -21,10 +21,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
        function addMovie() {
     const title = document.getElementById("movieTitleVistas").value;
-    const score = document.getElementById("movieScore").value;
+    const scoreInput = document.getElementById("movieScore");
+    const score = parseInt(scoreInput.value);
     const comment = document.getElementById("movieComment").value;
     const moviesContainer = document.getElementById("moviesContainer");
 
+    // Validar que el puntaje esté dentro del rango 1-10
+    if (isNaN(score) || score < 1) {
+        scoreInput.value = 1;
+    } else if (score > 10) {
+        scoreInput.value = 10;
+    }
+
+    // Validar que todos los campos estén completos
     if (!title || !score || !comment) {
         alert("Por favor, completa todos los campos.");
         return;
@@ -54,6 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("movieScore").value = "";
     document.getElementById("movieComment").value = "";
 }
+
+// Validación de input para evitar valores fuera de rango
+document.getElementById("movieScore").addEventListener("input", function () {
+    let value = parseInt(this.value);
+
+    if (isNaN(value) || value < 1) {
+        this.value = 1;
+    } else if (value > 10) {
+        this.value = 10;
+    }
+});
 
 function editMovie(button) {
     const movieCard = button.parentElement.parentElement;
