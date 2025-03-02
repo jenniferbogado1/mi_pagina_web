@@ -64,14 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("movieComment").value = "";
 }
 
-// Validación de input para evitar valores fuera de rango
+// Validación de input en tiempo real
 document.getElementById("movieScore").addEventListener("input", function () {
-    let value = parseInt(this.value);
+    let value = this.value.trim(); // Obtener el valor sin espacios
 
-    if (isNaN(value) || value < 1) {
-        this.value = 1;
-    } else if (value > 10) {
-        this.value = 10;
+    // Permitir que el usuario borre el input sin establecer un valor forzado
+    if (value === "") return;
+
+    let numValue = parseInt(value);
+
+    if (!isNaN(numValue)) {
+        if (numValue < 1) this.value = 1;
+        if (numValue > 10) this.value = 10;
+    }
+});
+
+// Validación al perder el foco (cuando el usuario deja de escribir)
+document.getElementById("movieScore").addEventListener("blur", function () {
+    let value = this.value.trim();
+    if (value === "" || isNaN(value)) {
+        this.value = ""; // Dejar vacío si el usuario no ingresa nada
     }
 });
 
