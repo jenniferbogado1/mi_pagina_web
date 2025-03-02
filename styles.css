@@ -5,7 +5,7 @@ body {
     font-family: Arial, sans-serif;
     color: white;
     text-align: center;
-    background-color: #222; /* Fondo oscuro */
+    background-color: #222;
 }
 
 /* Fondo con imagen */
@@ -17,12 +17,52 @@ body {
     z-index: -1;
 }
 
+/* ---- Menú ---- */
+.menu-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+}
+
+.menu-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    justify-items: center;
+}
+
+.menu-item {
+    width: 90%;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.menu-item img {
+    width: 50px;
+    height: 50px;
+}
+
 /* ---- Contenedor Principal ---- */
 .container {
     padding: 20px;
 }
 
-/* ---- Estilos Responsivos ---- */
+/* ---- Películas ---- */
 .movies-container {
     display: flex;
     flex-direction: column;
@@ -32,33 +72,7 @@ body {
     width: 100%;
 }
 
-/* ---- Menú ---- */ 
-.menu-container { 
-position: absolute; 
-top: 50%; 
-left: 50%; 
-transform: translate(-50%, -50%); 
-background: rgba(0, 0, 0, 0.8); 
-padding: 20px; 
-border-radius: 10px; 
-box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
- width: 350px; }
-
-h1 { font-size: 24px; margin: 10px 0; }
-
-p { font-size: 14px; margin-bottom: 20px; }
-
-/* Opciones del menú */ .menu-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; justify-items: center; }
-
-.menu-item { width: 90%; background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
-
-.menu-item:hover { background: rgba(255, 255, 255, 0.4); }
-
-.menu-item img { width: 50px; height: 50px; }
-
-.menu-item span { margin-top: 5px; font-size: 14px; }
-
-/* ---- Tarjeta de Película ---- */
+/* Tarjeta de película */
 .movie-card {
     width: 90%;
     max-width: 500px;
@@ -70,33 +84,28 @@ p { font-size: 14px; margin-bottom: 20px; }
     color: black;
 }
 
-/* ---- Ajustes de Tamaño ---- */
-input, textarea {
+/* Diseño del título */
+.movie-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #222;
+}
+
+/* ---- Inputs y Botones ---- */
+input {
     width: 100%;
     max-width: 450px;
-    height: 50px; /* Más alto */
+    height: 50px;
     border: 2px solid #f39c12;
     border-radius: 10px;
     padding: 10px;
     background: #fff;
     color: black;
     font-size: 16px;
-    display: block;
     margin: 10px auto;
 }
 
-textarea {
-    height: 100px; /* Más grande */
-}
-
-/* ---- Estrellas ---- */
-.stars-container {
-    display: flex;
-    justify-content: center;
-    font-size: 30px; /* Más grandes */
-}
-
-/* ---- Botones ---- */
 button {
     background-color: #f39c12;
     color: white;
@@ -115,29 +124,31 @@ button:hover {
     background-color: #d68910;
 }
 
-/* ---- Ajuste en Movie List (Eliminando el cuadro vacío) ---- */
-#movieList {
+/* ---- Floating Buttons ---- */
+.floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 0;
-    background: none;
-    border: none;
-    position: relative;
-    top: auto;
-    right: auto;
 }
 
-/* ---- Diseño Responsivo ---- */
+.floating-buttons button {
+    background-color: #f39c12;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* ---- Responsividad ---- */
 @media screen and (max-width: 600px) {
-    .movie-card {
-        width: 95%;
+    .menu-container {
+        width: 80%;
     }
-    input, textarea, button {
+    input, button {
         max-width: 100%;
-    }
-    .stars-container {
-        font-size: 25px; /* Tamaño más pequeño en celulares */
     }
 }
