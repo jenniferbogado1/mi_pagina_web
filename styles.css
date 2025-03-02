@@ -261,3 +261,32 @@ li {
     border-radius: 5px;
     color: black;
 }
+
+/* Estilos para el campo de comentario */
+textarea {
+    width: 90%;
+    max-width: 500px;
+    height: 80px;
+    border: 2px solid #f39c12;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    color: black;
+    font-size: 14px;
+    display: block;
+    margin: 10px auto;
+    resize: none;
+}
+
+textarea::placeholder {
+    color: #888;
+}
+
+/* Ajuste en movie-card */
+.movie-comment {
+    font-style: italic;
+    font-size: 14px;
+    text-align: center;
+    color: #444;
+    margin-top: 5px;
+}
