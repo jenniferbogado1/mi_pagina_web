@@ -11,11 +11,19 @@
 
    <h2>Películas Vistas</h2>
 
-   <input type="text" id="movieTitleVistas" placeholder="Nombre de la película">
-   <div class="stars-container" id="starRating"></div>
-   <input type="number" id="movieScore" placeholder="Puntaje (1-10)" min="1" max="10">
-   <textarea id="movieComment" placeholder="Comentario sobre la película"></textarea>
-   <button onclick="addMovie()">Agregar</button>
+   <div class="input-container">
+    <input type="text" id="movieTitleVistas" placeholder="Nombre de la película">
+</div>
+
+<div class="score-container">
+    <input type="number" id="movieScore" placeholder="Puntaje (1-10)" min="1" max="10">
+</div>
+
+<div class="comment-container">
+    <textarea id="movieComment" placeholder="Comentario"></textarea>
+</div>
+
+<button class="add-movie-btn" onclick="addMovie()">Agregar Película</button>
 
    <h3>Lista de películas vistas:</h3>
    <ul id="movieList"></ul>
