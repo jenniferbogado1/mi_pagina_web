@@ -20,54 +20,58 @@ document.addEventListener("DOMContentLoaded", () => {
        }
 
        function addMovie() {
-    let title = document.getElementById("movieTitleVistas").value;
-    let score = document.getElementById("movieScore").value;
-    
-    if (title.trim() === "" || score.trim() === "") {
+    const title = document.getElementById("movieTitleVistas").value;
+    const score = document.getElementById("movieScore").value;
+    const comment = document.getElementById("movieComment").value;
+    const moviesContainer = document.getElementById("moviesContainer");
+
+    if (!title || !score || !comment) {
         alert("Por favor, completa todos los campos.");
         return;
     }
 
-    let stars = "⭐".repeat(Math.round(score / 2)); // Estrellas basadas en puntaje
-    let today = new Date().toLocaleDateString();
+    // Crear la tarjeta de la película
+    const movieCard = document.createElement("div");
+    movieCard.classList.add("movie-card");
 
-    let movieHTML = `
-        <div class="movie-card">
-            <div class="movie-title">${title}</div>
-            <div class="movie-rating">${score}/10</div>
-            <div class="movie-stars">${stars}</div>
-            <div class="movie-comment">"Comentario aquí"</div>
-            <div class="movie-date">${today}</div>
-            <div class="movie-actions">
-                <button class="edit-btn" onclick="editMovie(this)">✏️</button>
-                <button class="delete-btn" onclick="deleteMovie(this)">🗑️</button>
-            </div>
+    movieCard.innerHTML = `
+        <div class="movie-title">${title.toUpperCase()}</div>
+        <div class="movie-rating">${score}/10</div>
+        <div class="movie-stars">${"⭐".repeat(Math.round(score / 2))}</div>
+        <div class="movie-comment">"${comment}"</div>
+        <div class="movie-date">${new Date().toLocaleDateString()}</div>
+        <div class="movie-actions">
+            <button class="edit-btn" onclick="editMovie(this)">✏️</button>
+            <button class="delete-btn" onclick="deleteMovie(this)">🗑️</button>
         </div>
     `;
 
-    document.querySelector(".movies-container").innerHTML += movieHTML;
+    // Agregar la película al contenedor
+    moviesContainer.appendChild(movieCard);
 
-    // Limpiar campos
+    // Limpiar los campos después de agregar la película
     document.getElementById("movieTitleVistas").value = "";
     document.getElementById("movieScore").value = "";
+    document.getElementById("movieComment").value = "";
 }
 
-// Función para eliminar película
-function deleteMovie(button) {
-    button.parentElement.parentElement.remove();
-}
-
-// Función para editar película
 function editMovie(button) {
-    let movieCard = button.parentElement.parentElement;
-    let title = prompt("Editar título:", movieCard.querySelector(".movie-title").innerText);
-    let score = prompt("Editar puntaje (1-10):", movieCard.querySelector(".movie-rating").innerText.split("/")[0]);
+    const movieCard = button.parentElement.parentElement;
+    const title = prompt("Nuevo nombre de la película:", movieCard.querySelector(".movie-title").innerText);
+    const score = prompt("Nuevo puntaje (1-10):", movieCard.querySelector(".movie-rating").innerText.split("/")[0]);
+    const comment = prompt("Nuevo comentario:", movieCard.querySelector(".movie-comment").innerText.replace(/"/g, ''));
 
-    if (title && score) {
-        movieCard.querySelector(".movie-title").innerText = title;
+    if (title) movieCard.querySelector(".movie-title").innerText = title.toUpperCase();
+    if (score) {
         movieCard.querySelector(".movie-rating").innerText = `${score}/10`;
-        movieCard.querySelector(".movie-stars").innerText = "⭐".repeat(Math.round(score / 2));
+        movieCard.querySelector(".movie-stars").innerHTML = "⭐".repeat(Math.round(score / 2));
     }
+    if (comment) movieCard.querySelector(".movie-comment").innerText = `"${comment}"`;
+}
+
+function deleteMovie(button) {
+    const movieCard = button.parentElement.parentElement;
+    movieCard.remove();
 }
 
        function saveMovies() {
