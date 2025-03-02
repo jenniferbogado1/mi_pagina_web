@@ -197,22 +197,46 @@ p {
 }
 
 /* ---- Inputs y botones ---- */
-.input-container, .score-container {
+.input-container, .score-container, .comment-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin: 20px;
+    margin: 20px 0;
+    width: 100%;
 }
 
-.input-container input, .score-container input {
+.input-container input, 
+.score-container input, 
+.comment-container textarea {
     border: 2px solid #f39c12;
-    border-radius: 50px;
-    padding: 10px 20px;
-    width: 350px;
-    margin-left: 10px;
+    border-radius: 10px;
+    padding: 12px;
+    width: 400px;
     background: #fff;
     color: black;
     font-size: 18px;
+    text-align: center;
+}
+
+.comment-container textarea {
+    height: 80px;
+    resize: none;
+}
+
+/* Botón de agregar película */
+.add-movie-btn {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.add-movie-btn:hover {
+    background-color: #d87d00;
 }
 
 /* ---- Floating Buttons ---- */
@@ -272,7 +296,9 @@ li {
         width: 95%;
     }
 
-    .input-container input, .score-container input {
+    .input-container input, 
+    .score-container input, 
+    .comment-container textarea {
         width: 90%;
     }
 }
