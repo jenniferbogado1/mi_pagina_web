@@ -260,9 +260,8 @@ p {
 
 /* ---- Lista de películas ---- */
 #movieList {
-    border: 2px solid #f39c12;
-    border-radius: 10px;
-    background-color: #fff;
+    border : none;
+    background-color: transparent;
     padding: 20px;
     width: 400px;
     list-style-type: none;
