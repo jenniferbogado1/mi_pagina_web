@@ -14,24 +14,13 @@
    <input type="text" id="movieTitleVistas" placeholder="Nombre de la película">
    <div class="stars-container" id="starRating"></div>
    <input type="number" id="movieScore" placeholder="Puntaje (1-10)" min="1" max="10">
+   <textarea id="movieComment" placeholder="Comentario sobre la película"></textarea>
    <button onclick="addMovie()">Agregar</button>
 
    <h3>Lista de películas vistas:</h3>
    <ul id="movieList"></ul>
 
-   <div class="movies-container">
-       <div class="movie-card">
-           <div class="movie-title">INTERESTELAR</div>
-           <div class="movie-rating">9/10</div>
-           <div class="movie-stars">⭐⭐⭐⭐⭐</div>
-           <div class="movie-comment">"Comentario aquí"</div>
-           <div class="movie-date">27/06/2025</div>
-           <div class="movie-actions">
-               <button class="edit-btn">✏️</button>
-               <button class="delete-btn">🗑️</button>
-           </div>
-       </div>
-   </div>
+   <div class="movies-container" id="moviesContainer"></div>
 
    <a href="menu.html">Volver al menú</a>
 
