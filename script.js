@@ -115,7 +115,7 @@ function editMovie(button) {
     // Crear inputs para la edición en línea
     movieCard.innerHTML = `
         <input type="text" value="${movie.title}" class="edit-title">
-        <input type="number" value="${movie.score}" min="1" max="10" class="edit-score">
+        <input type="number" value="${movie.score}" step="0.1" min="1" max="10" class="edit-score">
         <textarea class="edit-comment">${movie.comment}</textarea>
         
         <button onclick="saveMovie(${index}, this)">Guardar</button>
@@ -129,19 +129,22 @@ function saveMovie(index, button) {
 
     // Obtener los valores editados
     let newTitle = movieCard.querySelector(".edit-title").value.trim();
-    let newScore = parseInt(movieCard.querySelector(".edit-score").value);
+    let newScore = parseFloat(movieCard.querySelector(".edit-score").value); // Ahora permite decimales
     let newComment = movieCard.querySelector(".edit-comment").value.trim();
 
     // Validar el puntaje
     if (isNaN(newScore) || newScore < 1 || newScore > 10) {
-        alert("El puntaje debe estar entre 1 y 10.");
+        alert("El puntaje debe estar entre 1.0 y 10.0.");
         return;
     }
+
+    // Redondear a un decimal para mantener consistencia
+    newScore = newScore.toFixed(1);
 
     // Actualizar los datos
     movies[index].title = newTitle;
     movies[index].score = newScore;
-    movies[index].starRating = Math.round(newScore / 2);
+    movies[index].stars = generateStars(newScore); // Regenerar estrellas
     movies[index].comment = newComment;
 
     localStorage.setItem("movies", JSON.stringify(movies));
