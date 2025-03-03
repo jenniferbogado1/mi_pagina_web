@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
            }
        }
 
-       function addMovie() {
+   
+
+function addMovie() {
     const title = document.getElementById("movieTitleVistas").value;
     const scoreInput = document.getElementById("movieScore");
     const score = parseInt(scoreInput.value);
@@ -58,6 +60,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Agregar la película al contenedor
     moviesContainer.appendChild(movieCard);
 
+    // Guardar en localStorage
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.push({
+        title: title,
+        score: score,
+        starRating: Math.round(score / 2), // Convertimos el puntaje en estrellas
+        addedDate: new Date().toLocaleDateString()
+    });
+
+    localStorage.setItem("movies", JSON.stringify(movies));
+
+    // Recargar la lista
+    loadMovies();
+
     // Limpiar los campos después de agregar la película
     document.getElementById("movieTitleVistas").value = "";
     document.getElementById("movieScore").value = "";
@@ -78,21 +94,6 @@ document.getElementById("movieScore").addEventListener("input", function () {
         if (numValue > 10) this.value = 10;
     }
 });
- // Guardar en localStorage
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies.push({
-        title: title,
-        score: score,
-        starRating: Math.round(score / 2), // Convertimos el puntaje en estrellas
-        addedDate: new Date().toLocaleDateString()
-    });
-
-    localStorage.setItem("movies", JSON.stringify(movies));
-
-    // Recargar la lista
-    loadMovies();
-}
-
 
 // Validación al perder el foco (cuando el usuario deja de escribir)
 document.getElementById("movieScore").addEventListener("blur", function () {
