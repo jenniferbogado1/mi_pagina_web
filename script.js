@@ -203,7 +203,6 @@ function deleteMovie(button) {
 
 
 
-// Cargar películas vistas desde localStorage
 function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
@@ -218,9 +217,9 @@ function loadMovies() {
             <span class="popcorn">🍿</span> 
             <input type="text" value="${movie.title}" class="edit-title" disabled>
             <div class="stars-container" data-index="${index}" data-editable="false">
-                ${generateStars(movie.starRating, index)}
+                ${generateStars(Math.round(movie.score / 2))}  <!-- Convertimos el puntaje de 10 a 5 estrellas -->
             </div>
-            <p>🎯 Puntaje: <span class="movie-score">${movie.starRating}</span>/5</p>
+            <p>🎯 Puntaje: <span class="movie-score">${movie.score}</span>/10</p>
             <span>📅 Agregada el: ${movie.addedDate}</span>
             <button onclick="editMovie(${index})">Editar</button>
             <button onclick="saveMovie(${index})" style="display:none;">Guardar</button>
@@ -232,6 +231,7 @@ function loadMovies() {
 
     setupStarClickEvents();
 }
+
 
 function loadSection(section) {
     fetch(`${section}.html`)
