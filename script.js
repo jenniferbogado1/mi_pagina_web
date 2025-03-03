@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadMovies();
     setupStarRating();
+    loadWatchList();
 });
 
 // Navegación entre secciones
