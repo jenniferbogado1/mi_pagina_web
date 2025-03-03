@@ -43,10 +43,10 @@ function addMovie() {
 
     // Crear la tarjeta de película
     const movie = {
-        title,
-        score,
-        starRating: Math.round(score / 2),
-        comment,
+        title: title,
+        score: score,
+        stars: generateStars(score), // Generamos las estrellas automáticamente
+        comment: comment,
         addedDate: new Date().toLocaleDateString()
     };
 
@@ -61,24 +61,24 @@ function addMovie() {
     document.getElementById("movieScore").value = "";
     document.getElementById("movieComment").value = "";
 }
-
-// Cargar películas guardadas
+//cargar películas
 function loadMovies() {
-    const movieList = document.getElementById("movieList");
+    let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
+
     movies.forEach((movie, index) => {
         let li = document.createElement("li");
-        li.dataset.index = index;
         li.classList.add("movie-card");
+        li.dataset.index = index;
 
         li.innerHTML = `
-            <p class="movie-title">${movie.title.toUpperCase()}</p>
-            <p class="movie-score">🎯 Puntaje: ${movie.score}/10</p>
-            <p class="movie-stars">${"⭐".repeat(movie.starRating)}</p>
-            <p class="movie-comment">"${movie.comment}"</p>
-            <p class="movie-date">📅 ${movie.addedDate}</p>
+            <strong>${movie.title.toUpperCase()}</strong>
+            <p>🎯 Puntaje: ${movie.score}/10</p>
+            <p>⭐ ${generateStars(movie.score)}</p>
+            <p>"${movie.comment}"</p>
+            <p>📅 Agregada el: ${movie.addedDate}</p>
             <button onclick="editMovie(this)">✏️ Editar</button>
             <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
         `;
