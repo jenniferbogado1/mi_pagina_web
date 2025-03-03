@@ -18,70 +18,21 @@ function generateStars(score) {
     return "⭐".repeat(fullStars) + halfStar + "☆".repeat(emptyStars);
 }
 
-// Agregar película a la lista de vistas
-function addMovie() {
-    const title = document.getElementById("movieTitleVistas").value.trim();
-    const scoreInput = document.getElementById("movieScore");
-    let score = parseFloat(scoreInput.value); // Permitir decimales
-    const comment = document.getElementById("movieComment").value.trim();
 
-    // Ocultar mensajes de error antes de validar
-    document.getElementById("error-title").style.display = "none";
-    document.getElementById("error-score").style.display = "none";
-    document.getElementById("error-comment").style.display = "none";
+// Obtener usuario logueado
+const loggedUser = localStorage.getItem("loggedUser");
 
-    let isValid = true;
-
-    // Validación de datos
-    if (!title) {
-        document.getElementById("error-title").textContent = "Por favor, ingresa el título de la película.";
-        document.getElementById("error-title").style.display = "block";
-        isValid = false;
-    }
-
-    if (isNaN(score) || score < 1 || score > 10) {
-        document.getElementById("error-score").textContent = "Por favor, ingresa un puntaje válido entre 1.0 y 10.0.";
-        document.getElementById("error-score").style.display = "block";
-        isValid = false;
-    }
-
-    if (!comment) {
-        document.getElementById("error-comment").textContent = "Por favor, ingresa un comentario.";
-        document.getElementById("error-comment").style.display = "block";
-        isValid = false;
-    }
-
-    if (!isValid) return;
-
-    // Ajustar score dentro del rango y redondear a un decimal
-    score = Math.min(Math.max(score, 1), 10).toFixed(1); 
-
-    const movie = {
-        title: title,
-        score: score,
-        stars: generateStars(score),
-        comment: comment,
-        addedDate: new Date().toLocaleDateString()
-    };
-
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
-    movies.push(movie);
-    localStorage.setItem("movies", JSON.stringify(movies));
-
-    loadMovies(); // Recargar la lista
-
-    // Limpiar los campos
-    document.getElementById("movieTitleVistas").value = "";
-    document.getElementById("movieScore").value = "";
-    document.getElementById("movieComment").value = "";
+// Si no hay usuario logueado, redirigir a login
+if (!loggedUser) {
+    window.location.href = "index.html";
 }
 
-// Cargar películas
+// Cargar películas solo del usuario logueado
 function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
 
     movies.forEach((movie, index) => {
         let li = document.createElement("li");
@@ -91,7 +42,7 @@ function loadMovies() {
         li.innerHTML = `
             <strong class="movie-title">${movie.title.toUpperCase()}</strong>
             <p>🎯 Puntaje: ${movie.score}/10</p>
-            <p>⭐ ${generateStars(parseFloat(movie.score))}</p>
+            <p>⭐ ${generateStars(movie.score)}</p>
             <p>"${movie.comment}"</p>
             <p>📅 Agregada el: ${movie.addedDate}</p>
             <button onclick="editMovie(this)">✏️ Editar</button>
@@ -102,6 +53,44 @@ function loadMovies() {
     });
 }
 
+// Guardar película en la lista del usuario logueado
+function addMovie() {
+    const title = document.getElementById("movieTitleVistas").value.trim();
+    const scoreInput = document.getElementById("movieScore");
+    let score = parseFloat(scoreInput.value);
+    const comment = document.getElementById("movieComment").value.trim();
+
+    if (!title || isNaN(score) || score < 1 || score > 10 || !comment) {
+        alert("Completa todos los campos correctamente.");
+        return;
+    }
+
+    score = score.toFixed(1);
+
+    const movie = {
+        title: title,
+        score: score,
+        stars: generateStars(score),
+        comment: comment,
+        addedDate: new Date().toLocaleDateString()
+    };
+
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    movies.push(movie);
+    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+
+    loadMovies(); 
+
+    document.getElementById("movieTitleVistas").value = "";
+    document.getElementById("movieScore").value = "";
+    document.getElementById("movieComment").value = "";
+}
+
+// Cerrar sesión
+function logout() {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "index.html";
+}
 
 
 //editar película 
