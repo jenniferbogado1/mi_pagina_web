@@ -87,28 +87,48 @@ function loadMovies() {
     });
 }
 
-// Editar una película
+//editar película 
+
 function editMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
     let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    let movie = movies[index];
 
-    let title = prompt("Nuevo nombre de la película:", movies[index].title);
-    let score = prompt("Nuevo puntaje (1-10):", movies[index].score);
-    let comment = prompt("Nuevo comentario:", movies[index].comment);
+    // Crear inputs para la edición en línea
+    movieCard.innerHTML = `
+        <input type="text" value="${movie.title}" class="edit-title">
+        <input type="number" value="${movie.score}" min="1" max="10" class="edit-score">
+        <textarea class="edit-comment">${movie.comment}</textarea>
+        
+        <button onclick="saveMovie(${index}, this)">Guardar</button>
+        <button onclick="loadMovies()">Cancelar</button>
+    `;
+}
 
-    if (title) movies[index].title = title.trim();
-    if (score) {
-        let newScore = parseInt(score);
-        if (!isNaN(newScore) && newScore >= 1 && newScore <= 10) {
-            movies[index].score = newScore;
-            movies[index].starRating = Math.round(newScore / 2);
-        }
+function saveMovie(index, button) {
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    const movieCard = button.parentElement;
+
+    // Obtener los valores editados
+    let newTitle = movieCard.querySelector(".edit-title").value.trim();
+    let newScore = parseInt(movieCard.querySelector(".edit-score").value);
+    let newComment = movieCard.querySelector(".edit-comment").value.trim();
+
+    // Validar el puntaje
+    if (isNaN(newScore) || newScore < 1 || newScore > 10) {
+        alert("El puntaje debe estar entre 1 y 10.");
+        return;
     }
-    if (comment) movies[index].comment = comment.trim();
+
+    // Actualizar los datos
+    movies[index].title = newTitle;
+    movies[index].score = newScore;
+    movies[index].starRating = Math.round(newScore / 2);
+    movies[index].comment = newComment;
 
     localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies(); // Recargar lista actualizada
+    loadMovies(); // Recargar la lista con los cambios
 }
 
 // Eliminar película
