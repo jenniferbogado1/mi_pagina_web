@@ -78,6 +78,21 @@ document.getElementById("movieScore").addEventListener("input", function () {
         if (numValue > 10) this.value = 10;
     }
 });
+ // Guardar en localStorage
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    movies.push({
+        title: title,
+        score: score,
+        starRating: Math.round(score / 2), // Convertimos el puntaje en estrellas
+        addedDate: new Date().toLocaleDateString()
+    });
+
+    localStorage.setItem("movies", JSON.stringify(movies));
+
+    // Recargar la lista
+    loadMovies();
+}
+
 
 // Validación al perder el foco (cuando el usuario deja de escribir)
 document.getElementById("movieScore").addEventListener("blur", function () {
