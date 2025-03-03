@@ -25,6 +25,8 @@ function checkRoute() {
     }
 }
 
+
+
 // Agregar película a la lista de vistas
 function addMovie() {
     const title = document.getElementById("movieTitleVistas").value.trim();
@@ -32,20 +34,50 @@ function addMovie() {
     let score = parseInt(scoreInput.value);
     const comment = document.getElementById("movieComment").value.trim();
 
+    // Ocultar los mensajes de error antes de validaciones
+    document.getElementById("error-title").style.display = "none";
+    document.getElementById("error-score").style.display = "none";
+    document.getElementById("error-comment").style.display = "none";
+
+    let isValid = true;
+
     // Validación de datos
-    if (!title || isNaN(score) || !comment) {
-        alert("Por favor, completa todos los campos.");
+    if (!title) {
+        document.getElementById("error-title").textContent = "Por favor, ingresa el título de la película.";
+        document.getElementById("error-title").style.display = "block";
+        isValid = false;
+    }
+
+    if (isNaN(score) || score < 1 || score > 10) {
+        document.getElementById("error-score").textContent = "Por favor, ingresa un puntaje válido entre 1 y 10.";
+        document.getElementById("error-score").style.display = "block";
+        isValid = false;
+    }
+
+    if (!comment) {
+        document.getElementById("error-comment").textContent = "Por favor, ingresa un comentario.";
+        document.getElementById("error-comment").style.display = "block";
+        isValid = false;
+    }
+
+    // Si los campos no son válidos, detener la ejecución
+    if (!isValid) {
         return;
     }
 
+    // Si todo es válido, ocultar los mensajes de error
+    document.getElementById("error-title").style.display = "none";
+    document.getElementById("error-score").style.display = "none";
+    document.getElementById("error-comment").style.display = "none";
+
+    // Continuar con la lógica de agregar la película
     score = Math.min(Math.max(score, 1), 10); // Asegurar que esté entre 1 y 10
     scoreInput.value = score; // Ajustar el valor en el input
 
-    // Crear la tarjeta de película
     const movie = {
         title: title,
         score: score,
-        stars: generateStars(score), // Generamos las estrellas automáticamente
+        stars: generateStars(score),
         comment: comment,
         addedDate: new Date().toLocaleDateString()
     };
@@ -61,6 +93,9 @@ function addMovie() {
     document.getElementById("movieScore").value = "";
     document.getElementById("movieComment").value = "";
 }
+
+
+
 //cargar películas
 function loadMovies() {
     let movieList = document.getElementById("movieList");
