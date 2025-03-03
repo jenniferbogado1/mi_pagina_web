@@ -209,6 +209,20 @@ function removeFromWatchList(button) {
     loadWatchList();
 }
 
+function searchMovie() {
+    const query = document.getElementById("searchMovie").value.toLowerCase();
+    const movies = document.querySelectorAll("#movieList li");
+
+    movies.forEach(movie => {
+        const title = movie.querySelector(".movie-title").textContent.toLowerCase();
+        if (title.includes(query)) {
+            movie.style.display = "block"; // Mostrar si coincide
+        } else {
+            movie.style.display = "none"; // Ocultar si no coincide
+        }
+    });
+}
+
 // Verificar la ruta al cargar la página
 window.addEventListener('hashchange', checkRoute);
 window.addEventListener('load', () => {
