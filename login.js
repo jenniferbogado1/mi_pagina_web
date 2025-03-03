@@ -21,5 +21,5 @@ function login() {
 
 // Verificar si ya hay sesión activa
 if (localStorage.getItem("loggedUser")) {
-    window.location.href = "peliculas.html"; // Si ya está logueado, redirige automáticamente
+    window.location.href = "menu.html"; // Si ya está logueado, redirige automáticamente
 }
