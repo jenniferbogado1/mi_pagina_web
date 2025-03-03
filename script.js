@@ -9,22 +9,23 @@ function navigateTo(section) {
     window.location.hash = section;
 }
 
+
 function generateStars(score) {
-    let starRating = Math.round(score / 2); // Convertimos el puntaje (1-10) a estrellas (1-5)
-    return "⭐".repeat(starRating) + "☆".repeat(5 - starRating); // Rellena con estrellas vacías si es necesario
+    let fullStars = Math.floor(score / 2); // Estrellas completas
+    let halfStar = (score % 2) >= 1 ? "⭐" : ""; // Media estrella si es necesario
+    let emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Estrellas vacías restantes
+
+    return "⭐".repeat(fullStars) + halfStar + "☆".repeat(emptyStars);
 }
-
-
-
 
 // Agregar película a la lista de vistas
 function addMovie() {
     const title = document.getElementById("movieTitleVistas").value.trim();
     const scoreInput = document.getElementById("movieScore");
-    let score = parseInt(scoreInput.value);
+    let score = parseFloat(scoreInput.value); // Permitir decimales
     const comment = document.getElementById("movieComment").value.trim();
 
-    // Ocultar los mensajes de error antes de validaciones
+    // Ocultar mensajes de error antes de validar
     document.getElementById("error-title").style.display = "none";
     document.getElementById("error-score").style.display = "none";
     document.getElementById("error-comment").style.display = "none";
@@ -39,7 +40,7 @@ function addMovie() {
     }
 
     if (isNaN(score) || score < 1 || score > 10) {
-        document.getElementById("error-score").textContent = "Por favor, ingresa un puntaje válido entre 1 y 10.";
+        document.getElementById("error-score").textContent = "Por favor, ingresa un puntaje válido entre 1.0 y 10.0.";
         document.getElementById("error-score").style.display = "block";
         isValid = false;
     }
@@ -50,19 +51,10 @@ function addMovie() {
         isValid = false;
     }
 
-    // Si los campos no son válidos, detener la ejecución
-    if (!isValid) {
-        return;
-    }
+    if (!isValid) return;
 
-    // Si todo es válido, ocultar los mensajes de error
-    document.getElementById("error-title").style.display = "none";
-    document.getElementById("error-score").style.display = "none";
-    document.getElementById("error-comment").style.display = "none";
-
-    // Continuar con la lógica de agregar la película
-    score = Math.min(Math.max(score, 1), 10); // Asegurar que esté entre 1 y 10
-    scoreInput.value = score; // Ajustar el valor en el input
+    // Ajustar score dentro del rango y redondear a un decimal
+    score = Math.min(Math.max(score, 1), 10).toFixed(1); 
 
     const movie = {
         title: title,
@@ -84,9 +76,7 @@ function addMovie() {
     document.getElementById("movieComment").value = "";
 }
 
-
-
-//cargar películas
+// Cargar películas
 function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
@@ -99,18 +89,20 @@ function loadMovies() {
         li.dataset.index = index;
 
         li.innerHTML = `
-    <strong class="movie-title">${movie.title.toUpperCase()}</strong>
-    <p>🎯 Puntaje: ${movie.score}/10</p>
-    <p>⭐ ${generateStars(movie.score)}</p>
-    <p>"${movie.comment}"</p>
-    <p>📅 Agregada el: ${movie.addedDate}</p>
-    <button onclick="editMovie(this)">✏️ Editar</button>
-    <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
-`;
+            <strong class="movie-title">${movie.title.toUpperCase()}</strong>
+            <p>🎯 Puntaje: ${movie.score}/10</p>
+            <p>⭐ ${generateStars(parseFloat(movie.score))}</p>
+            <p>"${movie.comment}"</p>
+            <p>📅 Agregada el: ${movie.addedDate}</p>
+            <button onclick="editMovie(this)">✏️ Editar</button>
+            <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
+        `;
 
         movieList.appendChild(li);
     });
 }
+
+
 
 //editar película 
 
