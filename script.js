@@ -74,14 +74,14 @@ function loadMovies() {
         li.dataset.index = index;
 
         li.innerHTML = `
-            <strong>${movie.title.toUpperCase()}</strong>
-            <p>🎯 Puntaje: ${movie.score}/10</p>
-            <p>⭐ ${generateStars(movie.score)}</p>
-            <p>"${movie.comment}"</p>
-            <p>📅 Agregada el: ${movie.addedDate}</p>
-            <button onclick="editMovie(this)">✏️ Editar</button>
-            <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
-        `;
+    <strong class="movie-title">${movie.title.toUpperCase()}</strong>
+    <p>🎯 Puntaje: ${movie.score}/10</p>
+    <p>⭐ ${generateStars(movie.score)}</p>
+    <p>"${movie.comment}"</p>
+    <p>📅 Agregada el: ${movie.addedDate}</p>
+    <button onclick="editMovie(this)">✏️ Editar</button>
+    <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
+`;
 
         movieList.appendChild(li);
     });
