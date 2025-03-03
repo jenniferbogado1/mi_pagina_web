@@ -281,6 +281,70 @@ li {
     font-size: 16px;
 }
 
+/* Ajustes para la lista de películas por ver */
+#watchList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#watchList li {
+    background-color: #444;
+    color: #fff;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#watchList li:hover {
+    background-color: #555;
+}
+
+/* Ajustes visuales del formulario */
+.form-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#movieTitleAgregar {
+    padding: 12px;
+    width: 300px;
+    border-radius: 5px;
+    border: 2px solid #f39c12;
+    background-color: #fff;
+    color: black;
+    font-size: 16px;
+}
+
+.add-movie-btn {
+    padding: 12px 20px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.add-movie-btn:hover {
+    background-color: #d87d00;
+}
+
+/* Asegurarse de que el formulario esté bien alineado */
+h2, h3 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+
 /* Adaptabilidad */
 @media (max-width: 768px) {
     .menu-container {
