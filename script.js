@@ -15,16 +15,21 @@ function generateStars(score) {
 }
 
 function checkRoute() {
-    const hash = window.location.hash.substring(1);
+    const hash = window.location.hash.substring(1) || 'inicio'; // Predeterminado a "inicio"
+    
     document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
-    if (hash === 'agregar') {
-        document.getElementById('agregar').style.display = 'block';
-    } else if (hash === 'vistas') {
-        document.getElementById('vistas').style.display = 'block';
+
+    const section = document.getElementById(hash);
+    if (section) {
+        section.style.display = 'block';
     } else {
-        document.getElementById('inicio').style.display = 'block';
+        document.getElementById('inicio').style.display = 'block'; // Evita que la página quede en negro si el hash no existe
     }
 }
+
+// Llamar la función cuando se carga la página y cuando cambia el hash
+window.addEventListener('load', checkRoute);
+window.addEventListener('hashchange', checkRoute);
 
 
 
