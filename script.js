@@ -8,6 +8,11 @@ function navigateTo(section) {
     window.location.hash = section;
 }
 
+function generateStars(score) {
+    let starRating = Math.round(score / 2); // Convertimos el puntaje (1-10) a estrellas (1-5)
+    return "⭐".repeat(starRating) + "☆".repeat(5 - starRating); // Rellena con estrellas vacías si es necesario
+}
+
 function checkRoute() {
     const hash = window.location.hash.substring(1);
     document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
