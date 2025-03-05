@@ -56,25 +56,29 @@ if (!loggedUser) {
 }
 
 // Cargar películas solo del usuario logueado
-function loadMovies() {
+
+async function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (!loggedUser) return;
 
-    movies.forEach((movie, index) => {
+    const querySnapshot = await getDocs(collection(db, `usuarios/${loggedUser}/peliculas`));
+
+    querySnapshot.forEach((doc) => {
+        const movie = doc.data();
         let li = document.createElement("li");
         li.classList.add("movie-card");
-        li.dataset.index = index;
 
         li.innerHTML = `
             <strong class="movie-title">${movie.title.toUpperCase()}</strong>
             <p>🎯 Puntaje: ${movie.score}/10</p>
-            <p>⭐ ${generateStars(movie.score)}</p>
+            <p>⭐ ${movie.stars}</p>
             <p>"${movie.comment}"</p>
             <p>📅 Agregada el: ${movie.addedDate}</p>
-            <button onclick="editMovie(this)">✏️ Editar</button>
-            <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
+            <button onclick="editMovie('${doc.id}')">✏️ Editar</button>
+            <button onclick="deleteMovie('${doc.id}')">🗑️ Eliminar</button>
         `;
 
         movieList.appendChild(li);
@@ -82,7 +86,8 @@ function loadMovies() {
 }
 
 // Guardar película en la lista del usuario logueado
-function addMovie() {
+
+async function addMovie() {
     const title = document.getElementById("movieTitleVistas").value.trim();
     const scoreInput = document.getElementById("movieScore");
     let score = parseFloat(scoreInput.value);
@@ -94,6 +99,8 @@ function addMovie() {
     }
 
     score = score.toFixed(1);
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (!loggedUser) return;
 
     const movie = {
         title: title,
@@ -103,11 +110,8 @@ function addMovie() {
         addedDate: new Date().toLocaleDateString()
     };
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
-    movies.push(movie);
-    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
-
-    loadMovies(); 
+    await addDoc(collection(db, `usuarios/${loggedUser}/peliculas`), movie);
+    loadMovies();
 
     document.getElementById("movieTitleVistas").value = "";
     document.getElementById("movieScore").value = "";
@@ -120,24 +124,39 @@ function logout() {
     window.location.href = "index.html";
 }
 
-function editMovie(button) {
-    const movieCard = button.parentElement;
-    const index = movieCard.dataset.index;
+
+async function editMovie(movieId) {
     const loggedUser = localStorage.getItem("loggedUser");
+    if (!loggedUser) return;
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
-    let movie = movies[index];
+    let moviesRef = doc(db, `usuarios/${loggedUser}/peliculas`, movieId);
+    let movieSnap = await getDoc(moviesRef);
+    
+    if (!movieSnap.exists()) return;
+    let movie = movieSnap.data();
 
-    // Crear inputs para la edición en línea
-    movieCard.innerHTML = `
-        <input type="text" value="${movie.title}" class="edit-title">
-        <input type="number" value="${movie.score}" step="0.1" min="1" max="10" class="edit-score">
-        <textarea class="edit-comment">${movie.comment}</textarea>
-        
-        <button onclick="saveMovie(${index}, this)">Guardar</button>
-        <button onclick="loadMovies()">Cancelar</button>
-    `;
+    const newTitle = prompt("Nuevo título:", movie.title);
+    let newScore = parseFloat(prompt("Nuevo puntaje (1-10):", movie.score));
+    const newComment = prompt("Nuevo comentario:", movie.comment);
+
+    if (!newTitle || isNaN(newScore) || newScore < 1 || newScore > 10 || !newComment) {
+        alert("Datos inválidos.");
+        return;
+    }
+
+    newScore = newScore.toFixed(1);
+
+    await setDoc(moviesRef, {
+        title: newTitle,
+        score: newScore,
+        stars: generateStars(newScore),
+        comment: newComment,
+        addedDate: movie.addedDate
+    });
+
+    loadMovies();
 }
+
 
 function saveMovie(index, button) {
     const loggedUser = localStorage.getItem("loggedUser");
@@ -170,15 +189,11 @@ function saveMovie(index, button) {
 
 // Eliminar película
 
-function deleteMovie(button) {
-    const movieCard = button.parentElement;
-    const index = movieCard.dataset.index;
+async function deleteMovie(movieId) {
     const loggedUser = localStorage.getItem("loggedUser");
+    if (!loggedUser) return;
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
-    movies.splice(index, 1);
-
-    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+    await deleteDoc(doc(db, `usuarios/${loggedUser}/peliculas`, movieId));
     loadMovies();
 }
 
