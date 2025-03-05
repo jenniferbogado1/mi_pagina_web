@@ -92,13 +92,12 @@ function logout() {
     window.location.href = "index.html";
 }
 
-
-//editar película 
-
 function editMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
+
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
     let movie = movies[index];
 
     // Crear inputs para la edición en línea
@@ -113,12 +112,13 @@ function editMovie(button) {
 }
 
 function saveMovie(index, button) {
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
     const movieCard = button.parentElement;
 
     // Obtener los valores editados
     let newTitle = movieCard.querySelector(".edit-title").value.trim();
-    let newScore = parseFloat(movieCard.querySelector(".edit-score").value); // Ahora permite decimales
+    let newScore = parseFloat(movieCard.querySelector(".edit-score").value);
     let newComment = movieCard.querySelector(".edit-comment").value.trim();
 
     // Validar el puntaje
@@ -133,22 +133,25 @@ function saveMovie(index, button) {
     // Actualizar los datos
     movies[index].title = newTitle;
     movies[index].score = newScore;
-    movies[index].stars = generateStars(newScore); // Regenerar estrellas
+    movies[index].stars = generateStars(newScore);
     movies[index].comment = newComment;
 
-    localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies(); // Recargar la lista con los cambios
+    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+    loadMovies();
 }
 
 // Eliminar película
+
 function deleteMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
-    let movies = JSON.parse(localStorage.getItem("movies")) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
 
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
     movies.splice(index, 1);
-    localStorage.setItem("movies", JSON.stringify(movies));
-    loadMovies(); // Recargar lista actualizada
+
+    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+    loadMovies();
 }
 
 // Configurar la calificación con estrellas
@@ -175,17 +178,21 @@ function setupStarRating() {
     }
 }
 
+
+
 // Agregar película a la lista de "por ver"
 function addToWatchList() {
     const title = document.getElementById('movieTitleAgregar').value.trim();
+    const loggedUser = localStorage.getItem("loggedUser");
+
     if (!title) {
         alert("Ingrese un nombre válido.");
         return;
     }
 
-    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
     watchList.push(title);
-    localStorage.setItem('watchList', JSON.stringify(watchList));
+    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
 
     loadWatchList();
     document.getElementById('movieTitleAgregar').value = '';
@@ -193,7 +200,8 @@ function addToWatchList() {
 
 // Cargar la lista de "por ver"
 function loadWatchList() {
-    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
     const list = document.getElementById('watchList');
     list.innerHTML = '';
 
@@ -210,11 +218,12 @@ function loadWatchList() {
 
 // Eliminar película de la lista de "por ver"
 function removeFromWatchList(button) {
-    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
+    const loggedUser = localStorage.getItem("loggedUser");
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
     let title = button.parentElement.querySelector("p").textContent;
-    watchList = watchList.filter(movie => movie !== title);
 
-    localStorage.setItem('watchList', JSON.stringify(watchList));
+    watchList = watchList.filter(movie => movie !== title);
+    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
     loadWatchList();
 }
 
@@ -224,11 +233,7 @@ function searchMovie() {
 
     movies.forEach(movie => {
         const title = movie.querySelector(".movie-title").textContent.toLowerCase();
-        if (title.includes(query)) {
-            movie.style.display = "block"; // Mostrar si coincide
-        } else {
-            movie.style.display = "none"; // Ocultar si no coincide
-        }
+        movie.style.display = title.includes(query) ? "block" : "none";
     });
 }
 
