@@ -1,3 +1,4 @@
+
 // Usuarios predefinidos
 const users = {
     "user": { password: "1234", role: "user" },
@@ -10,12 +11,15 @@ function login() {
     const password = document.getElementById("password").value.trim();
     const errorMsg = document.getElementById("login-error");
 
+    // Limpiar el mensaje de error antes de intentar iniciar sesión
+    errorMsg.style.display = "none"; 
+
     if (users[username] && users[username].password === password) {
         // Guardar usuario en sesión
         localStorage.setItem("loggedUser", username);
         window.location.href = "menu.html"; // Redirigir a la página de películas
     } else {
-        errorMsg.style.display = "block";
+        errorMsg.style.display = "block"; // Mostrar mensaje de error si las credenciales son incorrectas
     }
 }
 
