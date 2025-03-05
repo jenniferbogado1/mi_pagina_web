@@ -33,19 +33,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Cerrar sesión</h1>
-        <button onclick="cerrarSesion()">Cerrar sesión</button>
-    </div>
 
-    <script>
-        function cerrarSesion() {
-            // Eliminar datos de sesión almacenados en localStorage
-            localStorage.clear();
-            alert("Sesión cerrada.");
-            // Redirigir al login o página principal
-            window.location.href = "login.html"; // Cambia esto según tu archivo de login
-        }
-    </script>
+<a href="#" onclick="logout()" class="menu-item">
+    <img src="https://i.imgur.com/8YSWl06.png" alt="Cerrar Sesión">
+    <span>Cerrar Sesión</span>
+</a>
+
+<script>
+function logout() {
+    localStorage.removeItem("loggedUser"); // Eliminar usuario logueado
+    window.location.href = "index.html"; // Redirigir a la página de 
+}
+<script>
+
 </body>
 </html>
