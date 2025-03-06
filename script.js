@@ -59,7 +59,6 @@ function addMovie() {
     const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
     const commentInput = document.getElementById("movieComment");
-    const errorMsg = document.getElementById("add-movie-error");
 
     let title = titleInput.value.trim();
     let score = parseFloat(scoreInput.value);
