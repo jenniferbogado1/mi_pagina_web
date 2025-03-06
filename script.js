@@ -11,14 +11,12 @@ function navigateTo(section) {
 }
 
 
-
 function generateStars(score) {
-    let fullStars = Math.floor(score / 2); // Estrellas completas
-    let halfStar = (score % 2) >= 1 ? "⭐" : ""; // Media estrella si es necesario
-    let emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // Estrellas vacías restantes
-
-    return "⭐".repeat(fullStars) + halfStar + "☆".repeat(emptyStars);
+    let stars = Math.round(score / 2); // Convierte el puntaje en estrellas (1-5)
+    stars = Math.min(stars, 5); // Asegura que no haya más de 5 estrellas
+    return "★".repeat(stars) + "☆".repeat(5 - stars); // Llena con estrellas vacías si es menor a 5
 }
+
 
 // Obtener usuario logueado
 const loggedUser = localStorage.getItem("loggedUser");
