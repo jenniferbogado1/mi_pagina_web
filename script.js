@@ -205,23 +205,24 @@ function setupStarRating() {
 }
 
 
-
 // Agregar película a la lista de "por ver"
 function addToWatchList() {
     const title = document.getElementById('movieTitleAgregar').value.trim();
+    const comment = document.getElementById('movieCommentAgregar').value.trim();
     const loggedUser = localStorage.getItem("loggedUser");
 
-    if (!title) {
-        alert("Ingrese un nombre válido.");
+    if (!title || !comment) {
+        alert("Ingrese un nombre y un comentario válido.");
         return;
     }
 
     let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
-    watchList.push(title);
+    watchList.push({ title, comment });
     localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
 
     loadWatchList();
     document.getElementById('movieTitleAgregar').value = '';
+    document.getElementById('movieCommentAgregar').value = '';
 }
 
 // Cargar la lista de "por ver"
@@ -231,27 +232,71 @@ function loadWatchList() {
     const list = document.getElementById('watchList');
     list.innerHTML = '';
 
-    watchList.forEach(title => {
+    watchList.forEach((movie, index) => {
         const item = document.createElement('li');
         item.classList.add('watch-card');
+        item.dataset.index = index;
+
         item.innerHTML = `
-            <p>${title}</p>
-            <button onclick="removeFromWatchList(this)">Eliminar</button>
+            <p><strong>Película:</strong> ${movie.title}</p>
+            <p><strong>Comentario:</strong> ${movie.comment}</p>
+            <button onclick="editWatchListMovie(${index}, this)">Editar</button>
+            <button onclick="removeFromWatchList(${index})">Eliminar</button>
         `;
+
         list.appendChild(item);
     });
 }
 
-// Eliminar película de la lista de "por ver"
-function removeFromWatchList(button) {
+// Editar el nombre de la película y el comentario
+function editWatchListMovie(index, button) {
     const loggedUser = localStorage.getItem("loggedUser");
     let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
-    let title = button.parentElement.querySelector("p").textContent;
 
-    watchList = watchList.filter(movie => movie !== title);
+    const movie = watchList[index];
+    const item = button.parentElement;
+
+    item.innerHTML = `
+        <input type="text" value="${movie.title}" class="edit-title">
+        <textarea class="edit-comment">${movie.comment}</textarea>
+        <button onclick="saveWatchListMovie(${index}, this)">Guardar</button>
+        <button onclick="loadWatchList()">Cancelar</button>
+    `;
+}
+
+// Guardar los cambios en la película editada
+function saveWatchListMovie(index, button) {
+    const loggedUser = localStorage.getItem("loggedUser");
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+    const item = button.parentElement;
+
+    let newTitle = item.querySelector(".edit-title").value.trim();
+    let newComment = item.querySelector(".edit-comment").value.trim();
+
+    if (!newTitle || !newComment) {
+        alert("Ingrese un nombre y un comentario válido.");
+        return;
+    }
+
+    // Actualizar la película en la lista
+    watchList[index].title = newTitle;
+    watchList[index].comment = newComment;
+
     localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
     loadWatchList();
 }
+
+// Eliminar película de la lista de "por ver"
+function removeFromWatchList(index) {
+    const loggedUser = localStorage.getItem("loggedUser");
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+
+    watchList.splice(index, 1);
+    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+    loadWatchList();
+}
+
+
 
 function searchMovie() {
     const query = document.getElementById("searchMovie").value.toLowerCase();
