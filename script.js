@@ -53,14 +53,32 @@ function loadMovies() {
 }
 
 // Guardar película en la lista del usuario logueado
+
+
 function addMovie() {
-    const title = document.getElementById("movieTitleVistas").value.trim();
+    const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
+    const commentInput = document.getElementById("movieComment");
+    const errorMsg = document.getElementById("add-movie-error");
+
+    let title = titleInput.value.trim();
     let score = parseFloat(scoreInput.value);
-    const comment = document.getElementById("movieComment").value.trim();
+    let comment = commentInput.value.trim();
+
+    // Limpiar errores previos
+    errorMsg.style.display = "none";
+    titleInput.classList.remove("error");
+    scoreInput.classList.remove("error");
+    commentInput.classList.remove("error");
 
     if (!title || isNaN(score) || score < 1 || score > 10 || !comment) {
-        alert("Completa todos los campos correctamente.");
+        errorMsg.textContent = "Completa todos los campos correctamente.";
+        errorMsg.style.display = "block";
+
+        if (!title) titleInput.classList.add("error");
+        if (isNaN(score) || score < 1 || score > 10) scoreInput.classList.add("error");
+        if (!comment) commentInput.classList.add("error");
+
         return;
     }
 
@@ -78,18 +96,12 @@ function addMovie() {
     movies.push(movie);
     localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
 
-    loadMovies(); 
+    loadMovies();
 
-    document.getElementById("movieTitleVistas").value = "";
-    document.getElementById("movieScore").value = "";
-    document.getElementById("movieComment").value = "";
-}
-
-// Cerrar sesión
-function logout() {
-    localStorage.removeItem("loggedUser");
-    window.location.href = "index.html";
-
+    // Limpiar los campos después de agregar la película
+    titleInput.value = "";
+    scoreInput.value = "";
+    commentInput.value = "";
 }
 
 
@@ -101,10 +113,11 @@ function editMovie(button) {
     let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
     let movie = movies[index];
 
-    // Crear inputs para la edición en línea
+    // Crear inputs para la edición en línea con espacio para mostrar errores
     movieCard.innerHTML = `
         <input type="text" value="${movie.title}" class="edit-title">
         <input type="number" value="${movie.score}" step="0.1" min="1" max="10" class="edit-score">
+        <span class="score-error" style="color: red; display: none;"></span>
         <textarea class="edit-comment">${movie.comment}</textarea>
         
         <button onclick="saveMovie(${index}, this)">Guardar</button>
@@ -119,12 +132,20 @@ function saveMovie(index, button) {
 
     // Obtener los valores editados
     let newTitle = movieCard.querySelector(".edit-title").value.trim();
-    let newScore = parseFloat(movieCard.querySelector(".edit-score").value);
+    let newScoreInput = movieCard.querySelector(".edit-score");
+    let newScore = parseFloat(newScoreInput.value);
     let newComment = movieCard.querySelector(".edit-comment").value.trim();
+    let errorMsg = movieCard.querySelector(".score-error");
+
+    // Limpiar errores previos
+    errorMsg.style.display = "none";
+    newScoreInput.classList.remove("error");
 
     // Validar el puntaje
     if (isNaN(newScore) || newScore < 1 || newScore > 10) {
-        alert("El puntaje debe estar entre 1.0 y 10.0.");
+        errorMsg.textContent = "El puntaje debe estar entre 1.0 y 10.0.";
+        errorMsg.style.display = "block";
+        newScoreInput.classList.add("error");
         return;
     }
 
