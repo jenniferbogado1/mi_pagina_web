@@ -1,9 +1,15 @@
+// Verificar si hay usuario logueado antes de cargar datos
 document.addEventListener("DOMContentLoaded", () => {
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (!loggedUser) {
+        window.location.href = "index.html";
+        return; // Detener la ejecución
+    }
+
     loadMovies();
     setupStarRating();
     loadWatchList();
 });
-
 
 // Navegación entre secciones
 function navigateTo(section) {
@@ -18,13 +24,6 @@ function generateStars(score) {
 }
 
 
-// Obtener usuario logueado
-const loggedUser = localStorage.getItem("loggedUser");
-
-// Si no hay usuario logueado, redirigir a login
-if (!loggedUser) {
-    window.location.href = "index.html";
-}
 
 function loadMovies() {
     const loggedUser = localStorage.getItem("loggedUser");
