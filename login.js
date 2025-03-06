@@ -13,7 +13,7 @@ function login() {
     if (users[username] && users[username].password === password) {
         // Guardar usuario en sesión
         localStorage.setItem("loggedUser", username);
-        window.location.href = "peliculas.html"; // Redirigir a la página de películas
+        window.location.href = "menu.html"; // Redirigir a la página de películas
     } else {
         errorMsg.style.display = "block";
     }
