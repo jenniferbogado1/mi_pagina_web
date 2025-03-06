@@ -11,8 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadWatchList();
 });
 
-// Navegación entre secciones
+
 function navigateTo(section) {
+    document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+    document.getElementById(section).style.display = "block";
     window.location.hash = section;
 }
 
