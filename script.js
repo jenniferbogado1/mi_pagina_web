@@ -99,6 +99,8 @@ function addMovie() {
     movies.push(movie);
     localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
 
+alert("llamando a load movies");
+
     loadMovies();
 
     // Limpiar los campos después de agregar la película
