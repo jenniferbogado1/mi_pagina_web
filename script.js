@@ -56,7 +56,6 @@ function loadMovies() {
 
 function addMovie() {
 
-console.log("Ejecutando addMovie()");
     const loggedUser = localStorage.getItem("loggedUser"); // Asegurar que loggedUser esté definido
     const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
