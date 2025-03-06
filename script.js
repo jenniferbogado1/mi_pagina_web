@@ -209,8 +209,10 @@ function setupStarRating() {
 
 // Agregar película a la lista de "por ver"
 function addToWatchList() {
-    const title = document.getElementById('movieTitleAgregar').value.trim();
-    const comment = document.getElementById('movieCommentAgregar').value.trim();
+    const titleInput = document.getElementById('movieTitleAgregar');
+    const commentInput = document.getElementById('movieCommentAgregar');
+    const title = titleInput.value.trim();
+    const comment = commentInput.value.trim();
     const loggedUser = localStorage.getItem("loggedUser");
 
     if (!title || !comment) {
@@ -223,11 +225,12 @@ function addToWatchList() {
     localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
 
     loadWatchList();
-    document.getElementById('movieTitleAgregar').value = '';
-    document.getElementById('movieCommentAgregar').value = '';
+
+    // Limpiar los campos después de agregar la película
+    titleInput.value = '';
+    commentInput.value = '';
 }
 
-// Cargar la lista de "por ver"
 function loadWatchList() {
     const loggedUser = localStorage.getItem("loggedUser");
     let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
@@ -242,7 +245,7 @@ function loadWatchList() {
         item.innerHTML = `
             <p><strong>Película:</strong> ${movie.title}</p>
             <p><strong>Comentario:</strong> ${movie.comment}</p>
-            <button onclick="editWatchListMovie(${index}, this)">Editar</button>
+            <button onclick="editWatchListMovie(${index})">Editar</button>
             <button onclick="removeFromWatchList(${index})">Eliminar</button>
         `;
 
@@ -250,52 +253,29 @@ function loadWatchList() {
     });
 }
 
-// Editar el nombre de la película y el comentario
-function editWatchListMovie(index, button) {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
-
-    const movie = watchList[index];
-    const item = button.parentElement;
-
-    item.innerHTML = `
-        <input type="text" value="${movie.title}" class="edit-title">
-        <textarea class="edit-comment">${movie.comment}</textarea>
-        <button onclick="saveWatchListMovie(${index}, this)">Guardar</button>
-        <button onclick="loadWatchList()">Cancelar</button>
-    `;
-}
-
-// Guardar los cambios en la película editada
-function saveWatchListMovie(index, button) {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
-    const item = button.parentElement;
-
-    let newTitle = item.querySelector(".edit-title").value.trim();
-    let newComment = item.querySelector(".edit-comment").value.trim();
-
-    if (!newTitle || !newComment) {
-        alert("Ingrese un nombre y un comentario válido.");
-        return;
-    }
-
-    // Actualizar la película en la lista
-    watchList[index].title = newTitle;
-    watchList[index].comment = newComment;
-
-    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
-    loadWatchList();
-}
-
-// Eliminar película de la lista de "por ver"
 function removeFromWatchList(index) {
     const loggedUser = localStorage.getItem("loggedUser");
     let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
 
-    watchList.splice(index, 1);
+    watchList.splice(index, 1); // Eliminar la película en el índice indicado
     localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+
     loadWatchList();
+}
+
+function editWatchListMovie(index) {
+    const loggedUser = localStorage.getItem("loggedUser");
+    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+
+    const newTitle = prompt("Editar título:", watchList[index].title);
+    const newComment = prompt("Editar comentario:", watchList[index].comment);
+
+    if (newTitle !== null && newComment !== null) {
+        watchList[index].title = newTitle.trim();
+        watchList[index].comment = newComment.trim();
+        localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+        loadWatchList();
+    }
 }
 
 
