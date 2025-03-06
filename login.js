@@ -1,11 +1,8 @@
-// Import the functions you need from the SDKs you need
+// Importa los módulos necesarios de Firebase
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Tu configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDFezlQ68RTmss1HFnZyWFAmhjm8bstqAU",
   authDomain: "trackermovie-10156.firebaseapp.com",
@@ -16,11 +13,11 @@ const firebaseConfig = {
   measurementId: "G-GT8CZQKM5C"
 };
 
-// Initialize Firebase
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
-
+// Inicializar Firestore
+const db = getFirestore(app);
 
 // Función para iniciar sesión
 async function login() {
@@ -38,9 +35,9 @@ async function login() {
 
     try {
         // Verificar usuario en Firestore
-        const userDoc = await db.collection("usuarios").doc(username).get();
-        
-        if (userDoc.exists) {
+        const userDoc = await getDoc(doc(db, "usuarios", username));
+
+        if (userDoc.exists()) {
             const userData = userDoc.data();
             if (userData.password === password) {
                 // Guardar usuario en sesión
