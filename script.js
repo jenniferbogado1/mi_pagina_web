@@ -20,7 +20,6 @@ function generateStars(score) {
     return "⭐".repeat(fullStars) + halfStar + "☆".repeat(emptyStars);
 }
 
-
 // Obtener usuario logueado
 const loggedUser = localStorage.getItem("loggedUser");
 
@@ -30,29 +29,25 @@ if (!loggedUser) {
 }
 
 // Cargar películas solo del usuario logueado
-
-async function loadMovies() {
+function loadMovies() {
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
-    const loggedUser = localStorage.getItem("loggedUser");
-    if (!loggedUser) return;
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
 
-    const querySnapshot = await getDocs(collection(db, `usuarios/${loggedUser}/peliculas`));
-
-    querySnapshot.forEach((doc) => {
-        const movie = doc.data();
+    movies.forEach((movie, index) => {
         let li = document.createElement("li");
         li.classList.add("movie-card");
+        li.dataset.index = index;
 
         li.innerHTML = `
             <strong class="movie-title">${movie.title.toUpperCase()}</strong>
             <p>🎯 Puntaje: ${movie.score}/10</p>
-            <p>⭐ ${movie.stars}</p>
+            <p>⭐ ${generateStars(movie.score)}</p>
             <p>"${movie.comment}"</p>
             <p>📅 Agregada el: ${movie.addedDate}</p>
-            <button onclick="editMovie('${doc.id}')">✏️ Editar</button>
-            <button onclick="deleteMovie('${doc.id}')">🗑️ Eliminar</button>
+            <button onclick="editMovie(this)">✏️ Editar</button>
+            <button onclick="deleteMovie(this)">🗑️ Eliminar</button>
         `;
 
         movieList.appendChild(li);
@@ -60,8 +55,7 @@ async function loadMovies() {
 }
 
 // Guardar película en la lista del usuario logueado
-
-async function addMovie() {
+function addMovie() {
     const title = document.getElementById("movieTitleVistas").value.trim();
     const scoreInput = document.getElementById("movieScore");
     let score = parseFloat(scoreInput.value);
@@ -73,8 +67,6 @@ async function addMovie() {
     }
 
     score = score.toFixed(1);
-    const loggedUser = localStorage.getItem("loggedUser");
-    if (!loggedUser) return;
 
     const movie = {
         title: title,
@@ -84,8 +76,11 @@ async function addMovie() {
         addedDate: new Date().toLocaleDateString()
     };
 
-    await addDoc(collection(db, `usuarios/${loggedUser}/peliculas`), movie);
-    loadMovies();
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    movies.push(movie);
+    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+
+    loadMovies(); 
 
     document.getElementById("movieTitleVistas").value = "";
     document.getElementById("movieScore").value = "";
@@ -97,6 +92,8 @@ function logout() {
     localStorage.removeItem("loggedUser");
     window.location.href = "index.html";
 }
+
+
 
 
 async function editMovie(movieId) {
