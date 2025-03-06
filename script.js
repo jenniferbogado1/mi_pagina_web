@@ -54,8 +54,8 @@ function loadMovies() {
 
 // Guardar película en la lista del usuario logueado
 
-
 function addMovie() {
+    const loggedUser = localStorage.getItem("loggedUser"); // Asegurar que loggedUser esté definido
     const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
     const commentInput = document.getElementById("movieComment");
@@ -103,6 +103,8 @@ function addMovie() {
     scoreInput.value = "";
     commentInput.value = "";
 }
+
+
 
 
 function editMovie(button) {
