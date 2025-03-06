@@ -28,8 +28,8 @@ if (!loggedUser) {
     window.location.href = "index.html";
 }
 
-// Cargar películas solo del usuario logueado
 function loadMovies() {
+    const loggedUser = localStorage.getItem("loggedUser");
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
@@ -91,43 +91,28 @@ function addMovie() {
 function logout() {
     localStorage.removeItem("loggedUser");
     window.location.href = "index.html";
+
 }
 
 
-
-
-async function editMovie(movieId) {
+function editMovie(button) {
+    const movieCard = button.parentElement;
+    const index = movieCard.dataset.index;
     const loggedUser = localStorage.getItem("loggedUser");
-    if (!loggedUser) return;
 
-    let moviesRef = doc(db, `usuarios/${loggedUser}/peliculas`, movieId);
-    let movieSnap = await getDoc(moviesRef);
-    
-    if (!movieSnap.exists()) return;
-    let movie = movieSnap.data();
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    let movie = movies[index];
 
-    const newTitle = prompt("Nuevo título:", movie.title);
-    let newScore = parseFloat(prompt("Nuevo puntaje (1-10):", movie.score));
-    const newComment = prompt("Nuevo comentario:", movie.comment);
-
-    if (!newTitle || isNaN(newScore) || newScore < 1 || newScore > 10 || !newComment) {
-        alert("Datos inválidos.");
-        return;
-    }
-
-    newScore = newScore.toFixed(1);
-
-    await setDoc(moviesRef, {
-        title: newTitle,
-        score: newScore,
-        stars: generateStars(newScore),
-        comment: newComment,
-        addedDate: movie.addedDate
-    });
-
-    loadMovies();
+    // Crear inputs para la edición en línea
+    movieCard.innerHTML = `
+        <input type="text" value="${movie.title}" class="edit-title">
+        <input type="number" value="${movie.score}" step="0.1" min="1" max="10" class="edit-score">
+        <textarea class="edit-comment">${movie.comment}</textarea>
+        
+        <button onclick="saveMovie(${index}, this)">Guardar</button>
+        <button onclick="loadMovies()">Cancelar</button>
+    `;
 }
-
 
 function saveMovie(index, button) {
     const loggedUser = localStorage.getItem("loggedUser");
@@ -158,15 +143,23 @@ function saveMovie(index, button) {
     loadMovies();
 }
 
-// Eliminar película
 
-async function deleteMovie(movieId) {
+
+function deleteMovie(button) {
+    const movieCard = button.parentElement;
+    const index = movieCard.dataset.index;
     const loggedUser = localStorage.getItem("loggedUser");
-    if (!loggedUser) return;
 
-    await deleteDoc(doc(db, `usuarios/${loggedUser}/peliculas`, movieId));
+    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    movies.splice(index, 1);
+
+    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
     loadMovies();
 }
+
+
+
+
 
 // Configurar la calificación con estrellas
 function setupStarRating() {
