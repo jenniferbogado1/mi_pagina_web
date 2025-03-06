@@ -27,10 +27,18 @@ function generateStars(score) {
 
 function loadMovies() {
     const loggedUser = localStorage.getItem("loggedUser");
+    alert("Usuario logueado: " + loggedUser);
+
+    if (!loggedUser) {
+        alert("No se encontró un usuario logueado.");
+        return;
+    }
+
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
     let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    alert("Películas cargadas: " + JSON.stringify(movies));
 
     movies.forEach((movie, index) => {
         let li = document.createElement("li");
