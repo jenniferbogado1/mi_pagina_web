@@ -83,22 +83,7 @@ p {
 
 
 /* Asegura que cada tarjeta de película tenga la misma estructura */
-.movie-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 500px;
-    background: #222; /* Fondo oscuro como una claqueta */
-    border: 4px solid white; /* Bordes blancos */
-    padding: 20px;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    color: white;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-}
+
 
 
 .movie-card {
