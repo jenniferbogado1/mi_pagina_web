@@ -77,7 +77,10 @@ p {
 .menu-item span {
     margin-top: 5px;
     font-size: 14px;
+    color: white; /* Cambia el color del texto a blanco */
+    font-weight: bold; /* Opcional: hace que el texto sea más legible */
 }
+
 
 /* ---- Películas ---- */
 .movies-container {
