@@ -1,10 +1,5 @@
-// Verificar si hay usuario logueado antes de cargar datos
+
 document.addEventListener("DOMContentLoaded", () => {
-    const loggedUser = localStorage.getItem("loggedUser");
-    if (!loggedUser) {
-        window.location.href = "index.html";
-        return; // Detener la ejecución
-    }
 
     loadMovies();
     setupStarRating();
@@ -24,22 +19,12 @@ function generateStars(score) {
     return "★".repeat(stars) + "☆".repeat(5 - stars);
 }
 
-
+// Función para cargar las películas
 function loadMovies() {
-    const loggedUser = localStorage.getItem("loggedUser");
-    alert("Usuario logueado: " + loggedUser);
-
-    if (!loggedUser) {
-        alert("No se encontró un usuario logueado.");
-        return;
-    }
-
     let movieList = document.getElementById("movieList");
     movieList.innerHTML = "";
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
-    alert("Películas cargadas: " + JSON.stringify(movies));
-
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     movies.forEach((movie, index) => {
         let li = document.createElement("li");
         li.classList.add("movie-card");
@@ -59,13 +44,12 @@ function loadMovies() {
     });
 }
 
+
 // Guardar película en la lista del usuario logueado
 
 
+// Función para agregar una película
 function addMovie() {
-    alert("Función addMovie llamada");
-
-    const loggedUser = localStorage.getItem("loggedUser");
     const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
     const commentInput = document.getElementById("movieComment");
@@ -74,22 +58,8 @@ function addMovie() {
     let score = parseFloat(scoreInput.value);
     let comment = commentInput.value.trim();
 
-    alert("Datos ingresados: " + title + " " + score + " " + comment);
-
-    // Limpiar errores previos
-    errorMsg.style.display = "none";
-    titleInput.classList.remove("error");
-    scoreInput.classList.remove("error");
-    commentInput.classList.remove("error");
-
     if (!title || isNaN(score) || score < 1 || score > 10 || !comment) {
-        errorMsg.textContent = "Completa todos los campos correctamente.";
-        errorMsg.style.display = "block";
-
-        if (!title) titleInput.classList.add("error");
-        if (isNaN(score) || score < 1 || score > 10) scoreInput.classList.add("error");
-        if (!comment) commentInput.classList.add("error");
-
+        alert("Completa todos los campos correctamente.");
         return;
     }
 
@@ -103,11 +73,9 @@ function addMovie() {
         addedDate: new Date().toLocaleDateString()
     };
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     movies.push(movie);
-    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
-
-alert("llamando a load movies");
+    localStorage.setItem("movies", JSON.stringify(movies));
 
     loadMovies();
 
@@ -115,20 +83,16 @@ alert("llamando a load movies");
     titleInput.value = "";
     scoreInput.value = "";
     commentInput.value = "";
-
-    alert("Película agregada correctamente");
 }
 
-
+// Función para editar una película
 function editMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
-    const loggedUser = localStorage.getItem("loggedUser");
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     let movie = movies[index];
 
-    // Crear inputs para la edición en línea con espacio para mostrar errores
     movieCard.innerHTML = `
         <input type="text" value="${movie.title}" class="edit-title">
         <input type="number" value="${movie.score}" step="0.1" min="1" max="10" class="edit-score">
@@ -140,23 +104,22 @@ function editMovie(button) {
     `;
 }
 
+
+// Función para guardar los cambios de una película
+
 function saveMovie(index, button) {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     const movieCard = button.parentElement;
 
-    // Obtener los valores editados
     let newTitle = movieCard.querySelector(".edit-title").value.trim();
     let newScoreInput = movieCard.querySelector(".edit-score");
     let newScore = parseFloat(newScoreInput.value);
     let newComment = movieCard.querySelector(".edit-comment").value.trim();
     let errorMsg = movieCard.querySelector(".score-error");
 
-    // Limpiar errores previos
     errorMsg.style.display = "none";
     newScoreInput.classList.remove("error");
 
-    // Validar el puntaje
     if (isNaN(newScore) || newScore < 1 || newScore > 10) {
         errorMsg.textContent = "El puntaje debe estar entre 1.0 y 10.0.";
         errorMsg.style.display = "block";
@@ -164,30 +127,27 @@ function saveMovie(index, button) {
         return;
     }
 
-    // Redondear a un decimal para mantener consistencia
     newScore = newScore.toFixed(1);
 
-    // Actualizar los datos
     movies[index].title = newTitle;
     movies[index].score = newScore;
     movies[index].stars = generateStars(newScore);
     movies[index].comment = newComment;
 
-    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+    localStorage.setItem("movies", JSON.stringify(movies));
     loadMovies();
 }
 
 
-
+Función para eliminar una película
 function deleteMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
-    const loggedUser = localStorage.getItem("loggedUser");
 
-    let movies = JSON.parse(localStorage.getItem(`movies_${loggedUser}`)) || [];
+    let movies = JSON.parse(localStorage.getItem("movies")) || [];
     movies.splice(index, 1);
 
-    localStorage.setItem(`movies_${loggedUser}`, JSON.stringify(movies));
+    localStorage.setItem("movies", JSON.stringify(movies));
     loadMovies();
 }
 
@@ -220,33 +180,26 @@ function setupStarRating() {
 }
 
 
-// Agregar película a la lista de "por ver"
+// Función para agregar una película a la lista de "por ver"
 function addToWatchList() {
     const titleInput = document.getElementById('movieTitleAgregar');
     const commentInput = document.getElementById('movieCommentAgregar');
     const title = titleInput.value.trim();
     const comment = commentInput.value.trim();
-    const loggedUser = localStorage.getItem("loggedUser");
 
-    if (!title || !comment) {
-        alert("Ingrese un nombre y un comentario válido.");
-        return;
-    }
-
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
     watchList.push({ title, comment });
-    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+    localStorage.setItem('watchList', JSON.stringify(watchList));
 
     loadWatchList();
 
-    // Limpiar los campos después de agregar la película
     titleInput.value = '';
     commentInput.value = '';
 }
 
+// Función para cargar la lista de "por ver"
 function loadWatchList() {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
     const list = document.getElementById('watchList');
     list.innerHTML = '';
 
@@ -266,19 +219,19 @@ function loadWatchList() {
     });
 }
 
+// Función para eliminar una película de la lista de "por ver"
 function removeFromWatchList(index) {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
 
-    watchList.splice(index, 1); // Eliminar la película en el índice indicado
-    localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+    watchList.splice(index, 1);
+    localStorage.setItem('watchList', JSON.stringify(watchList));
 
     loadWatchList();
 }
 
+// Función para editar una película de la lista de "por ver"
 function editWatchListMovie(index) {
-    const loggedUser = localStorage.getItem("loggedUser");
-    let watchList = JSON.parse(localStorage.getItem(`watchList_${loggedUser}`)) || [];
+    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
 
     const newTitle = prompt("Editar título:", watchList[index].title);
     const newComment = prompt("Editar comentario:", watchList[index].comment);
@@ -286,10 +239,11 @@ function editWatchListMovie(index) {
     if (newTitle !== null && newComment !== null) {
         watchList[index].title = newTitle.trim();
         watchList[index].comment = newComment.trim();
-        localStorage.setItem(`watchList_${loggedUser}`, JSON.stringify(watchList));
+        localStorage.setItem('watchList', JSON.stringify(watchList));
         loadWatchList();
     }
 }
+
 
 
 
