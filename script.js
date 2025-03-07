@@ -179,8 +179,6 @@ function setupStarRating() {
     }
 }
 
-
-
 // Función para agregar una película a la lista de "por ver"
 function addToWatchList() {
     const titleInput = document.getElementById('movieTitleAgregar');
@@ -217,8 +215,6 @@ function addToWatchList() {
     commentInput.value = '';
 }
 
-
-
 // Función para cargar la lista de "por ver"
 function loadWatchList() {
     let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
@@ -237,12 +233,11 @@ function loadWatchList() {
 
         item.innerHTML = `
             <p><strong>Película:</strong></p>
-            <input type="text" id="title-${index}" value="${movie.title}" class="editable-input">
+            <input type="text" id="title-${index}" value="${movie.title}" class="editable-input" onchange="saveEdit(${index})">
             <br>
             <p><strong>Comentario:</strong></p>
-            <input type="text" id="comment-${index}" value="${movie.comment}" class="editable-input">
+            <input type="text" id="comment-${index}" value="${movie.comment}" class="editable-input" onchange="saveEdit(${index})">
             <br>
-            <button onclick="saveEdit(${index})">Guardar</button>
             <button onclick="removeFromWatchList(${index})">Eliminar</button>
         `;
 
@@ -261,10 +256,10 @@ function saveEdit(index) {
         watchList[index].title = newTitle;
         watchList[index].comment = newComment;
         localStorage.setItem('watchList', JSON.stringify(watchList));
-        loadWatchList();  // Recargar la lista para reflejar los cambios
     } else {
         alert("Por favor, completa tanto el título como el comentario.");
     }
+    loadWatchList();  // Recargar la lista para reflejar los cambios
 }
 
 // Función para eliminar una película de la lista de "por ver"
