@@ -139,7 +139,7 @@ function saveMovie(index, button) {
 }
 
 
-Función para eliminar una película
+//Función para eliminar una película
 function deleteMovie(button) {
     const movieCard = button.parentElement;
     const index = movieCard.dataset.index;
