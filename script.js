@@ -47,21 +47,43 @@ function loadMovies() {
 
 // Guardar película en la lista del usuario logueado
 
-
 // Función para agregar una película
 function addMovie() {
     const titleInput = document.getElementById("movieTitleVistas");
     const scoreInput = document.getElementById("movieScore");
     const commentInput = document.getElementById("movieComment");
 
+    const errorTitle = document.getElementById("errorTitle");
+    const errorScore = document.getElementById("errorScore");
+    const errorComment = document.getElementById("errorComment");
+
     let title = titleInput.value.trim();
     let score = parseFloat(scoreInput.value);
     let comment = commentInput.value.trim();
 
-    if (!title || isNaN(score) || score < 1 || score > 10 || !comment) {
-        alert("Completa todos los campos correctamente.");
-        return;
+    // Reiniciar los mensajes de error
+    errorTitle.textContent = "";
+    errorScore.textContent = "";
+    errorComment.textContent = "";
+
+    let hasError = false;
+
+    if (!title) {
+        errorTitle.textContent = "El título es obligatorio.";
+        hasError = true;
     }
+    
+    if (isNaN(score) || score < 1 || score > 10) {
+        errorScore.textContent = "El puntaje debe estar entre 1 y 10.";
+        hasError = true;
+    }
+
+    if (!comment) {
+        errorComment.textContent = "El comentario es obligatorio.";
+        hasError = true;
+    }
+
+    if (hasError) return; // Detiene la función si hay errores
 
     score = score.toFixed(1);
 
