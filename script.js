@@ -180,12 +180,32 @@ function setupStarRating() {
 }
 
 
+
 // Función para agregar una película a la lista de "por ver"
 function addToWatchList() {
     const titleInput = document.getElementById('movieTitleAgregar');
     const commentInput = document.getElementById('movieCommentAgregar');
     const title = titleInput.value.trim();
     const comment = commentInput.value.trim();
+
+    // Limpiar los mensajes de error previos
+    const errorTitle = document.getElementById('errorTitle');
+    const errorComment = document.getElementById('errorComment');
+    errorTitle.textContent = '';
+    errorComment.textContent = '';
+
+    // Verificar si los campos están vacíos y mostrar mensaje de error
+    let isValid = true;
+    if (!title) {
+        errorTitle.textContent = 'Por favor, ingresa un título.';
+        isValid = false;
+    }
+    if (!comment) {
+        errorComment.textContent = 'Por favor, ingresa un comentario.';
+        isValid = false;
+    }
+
+    if (!isValid) return;  // Si hay un error, no continuar
 
     let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
     watchList.push({ title, comment });
@@ -197,11 +217,18 @@ function addToWatchList() {
     commentInput.value = '';
 }
 
+
+
 // Función para cargar la lista de "por ver"
 function loadWatchList() {
     let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
     const list = document.getElementById('watchList');
     list.innerHTML = '';
+
+    // Verificar si la lista está vacía
+    if (watchList.length === 0) {
+        list.innerHTML = '<p>No hay películas en la lista.</p>';
+    }
 
     watchList.forEach((movie, index) => {
         const item = document.createElement('li');
@@ -209,14 +236,35 @@ function loadWatchList() {
         item.dataset.index = index;
 
         item.innerHTML = `
-            <p><strong>Película:</strong> ${movie.title}</p>
-            <p><strong>Comentario:</strong> ${movie.comment}</p>
-            <button onclick="editWatchListMovie(${index})">Editar</button>
+            <p><strong>Película:</strong></p>
+            <input type="text" id="title-${index}" value="${movie.title}" class="editable-input">
+            <br>
+            <p><strong>Comentario:</strong></p>
+            <input type="text" id="comment-${index}" value="${movie.comment}" class="editable-input">
+            <br>
+            <button onclick="saveEdit(${index})">Guardar</button>
             <button onclick="removeFromWatchList(${index})">Eliminar</button>
         `;
 
         list.appendChild(item);
     });
+}
+
+// Función para guardar los cambios después de editar
+function saveEdit(index) {
+    const newTitle = document.getElementById(`title-${index}`).value.trim();
+    const newComment = document.getElementById(`comment-${index}`).value.trim();
+
+    // Verificar que los campos no estén vacíos
+    if (newTitle && newComment) {
+        let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
+        watchList[index].title = newTitle;
+        watchList[index].comment = newComment;
+        localStorage.setItem('watchList', JSON.stringify(watchList));
+        loadWatchList();  // Recargar la lista para reflejar los cambios
+    } else {
+        alert("Por favor, completa tanto el título como el comentario.");
+    }
 }
 
 // Función para eliminar una película de la lista de "por ver"
@@ -229,19 +277,9 @@ function removeFromWatchList(index) {
     loadWatchList();
 }
 
-// Función para editar una película de la lista de "por ver"
-function editWatchListMovie(index) {
-    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
-
-    const newTitle = prompt("Editar título:", watchList[index].title);
-    const newComment = prompt("Editar comentario:", watchList[index].comment);
-
-    if (newTitle !== null && newComment !== null) {
-        watchList[index].title = newTitle.trim();
-        watchList[index].comment = newComment.trim();
-        localStorage.setItem('watchList', JSON.stringify(watchList));
-        loadWatchList();
-    }
+// Cargar la lista de películas cuando se cargue la página
+window.onload = function() {
+    loadWatchList();
 }
 
 
