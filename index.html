@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Películas por Ver</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <h2>Agregar Película a la Watchlist</h2>
 
-    <div class="welcome-container">
-        <h2>Bienvenido</h2>
-        <button onclick="goToMenu()">Ir al Menú</button>
+        <div class="form-group">
+            <input type="text" id="movieTitleAgregar" placeholder="Título de la película">
+            <div id="errorTitle" style="color: red;"></div> <!-- Error para el título -->
+            <br>
+            <input type="text" id="movieCommentAgregar" placeholder="Comentario">
+            <div id="errorComment" style="color: red;"></div> <!-- Error para el comentario -->
+            <br>
+            <button onclick="addToWatchList()">Agregar</button>
+        </div>
+
+        <h3>Lista de Películas por Ver</h3>
+        <ul id="watchList"></ul>
+
+        <a href="index.html">Volver al Menú</a>
     </div>
 
-    <script>
-        function goToMenu() {
-            window.location.href = "menu.html"; // Redirigir al menú
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
