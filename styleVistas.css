@@ -1,0 +1,65 @@
+
+
+.movie-card { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 500px; background: white; border: 4px solid black; padding: 20px; border-radius: 10px; font-family: Arial, sans-serif; color: black; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); text-align: center; }
+
+/* Efecto de recorte en los lados */ .movie-card::before, .movie-card::after { content: ""; position: absolute; width: 20px; height: 100%; background: repeating-linear-gradient( to bottom, transparent, transparent 8px, black 8px, black 12px ); top: 0; }
+
+.movie-card::before { left: -24px; /* Posición del recorte izquierdo */ }
+
+.movie-card::after { right: -24px; /* Posición del recorte derecho */ }
+
+/* Agregamos los semicírculos en los extremos */ .movie-card .circle { position: absolute; width: 40px; height: 40px; background: white; border: 4px solid black; border-radius: 50%; top: 50%; transform: translateY(-50%); z-index: 1; }
+
+.movie-card .circle.left { left: -20px; }
+
+.movie-card .circle.right { right: -20px; }
+
+/* Ajuste de los textos */ .movie-title { font-size: 22px; font-weight: bold; }
+
+.movie-rating { font-size: 18px; font-weight: bold; color: black; /* Dorado */ }
+
+.movie-stars { display: flex; justify-content: center; font-size: 24px; color: yellow; margin-top: 10px; }
+
+/* Contenedor de los detalles de la película */ .movie-details { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+
+/* Alinea nombre, puntaje y comentario en una misma línea / .movie-title, .movie-rating, .movie-comment { flex: 1; / Ocupan el mismo espacio */ text-align: center; padding: 5px; font-size: 16px; }
+
+/* Asegura que el texto en dispositivos móviles no se vea desordenado / @media (max-width: 768px) { .movie-details { flex-direction: column; / Alinea en columna en móviles */ gap: 10px; }
+
+.movie-title,
+.movie-rating,
+.movie-comment {
+    text-align: center;
+    width: 100%;
+}
+
+}
+
+/* ---- Películas ---- */ .movies-container { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 20px; width: 100%; }
+
+/* Input para edición del nombre */ .movie-title input { font-size: 20px; font-weight: bold; text-align: center; border: 2px solid #f39c12; border-radius: 5px; padding: 5px; width: 90%; background: #fff; color: black; display: none; }
+
+.movies-container.vistas .movie-stars { display: block; }
+
+/* Fecha de la película */ .movie-date { font-size: 12px; text-align: right; margin-top: 10px; color: #555; }
+
+/* Botones de edición y eliminación */ .movie-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+
+.edit-btn, .delete-btn { background: none; border: none; font-size: 18px; cursor: pointer; }
+
+/* ---- Estrellas ---- */ .stars-container { display: flex; justify-content: center; margin: 10px 0; }
+
+.stars { cursor: pointer; font-size: 24px; color: gold; }
+
+.star.active { color: orange; }
+
+/* ---- Inputs y botones ---- */ .input-container, .score-container, .comment-container { display: flex; flex-direction: column; align-items: center; margin: 20px 0; width: 100%; }
+
+.input-container input, .score-container input, .comment-container textarea { border: 2px solid #f39c12; border-radius: 10px; padding: 12px; width: 400px; background: #fff; color: black; font-size: 18px; text-align: center; }
+
+.comment-container textarea { height: 80px; resize: none; }
+
+/* Botón de agregar película */ .add-movie-btn { background-color: #f39c12; color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.3s; }
+
+.add-movie-btn:hover { background-color: #d87d00; }
+
