@@ -13,19 +13,26 @@
 
   <h2>Películas Vistas</h2>
 
-<div id="add-movie-error" style="color: red; display: none;"></div>
+<div id="add-movie-error" class="error-message"></div>
 
 <div class="form-group">
-<input type="text" id="movieTitleVistas" placeholder="Título de la película">
-<div id="errorTitle" style="color: red;"></div>
+    <div class="input-group">
+        <input type="text" id="movieTitleVistas" placeholder="Título de la película">
+        <div id="errorTitle" class="error-message"></div>
+    </div>
 
-<input type="number" id="movieScore" step="0.1" min="1" max="10" placeholder="Puntaje">
-<div id="errorScore" style="color: red;"></div>
+    <div class="input-group">
+        <input type="number" id="movieScore" step="0.1" min="1" max="10" placeholder="Puntaje">
+        <div id="errorScore" class="error-message"></div>
+    </div>
 
-<textarea id="movieComment" placeholder="Comentario"></textarea>
-<div id="errorComment" style="color: red;"></div>
+    <div class="input-group">
+        <textarea id="movieComment" placeholder="Comentario"></textarea>
+        <div id="errorComment" class="error-message"></div>
+    </div>
 
-<button class="add-movie-btn" onclick="addMovie()">Agregar Película</button>
+    <button class="add-movie-btn" onclick="addMovie()">Agregar Película</button>
+</div>
 
    <h3>Lista de películas vistas:</h3>
 
