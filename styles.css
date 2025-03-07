@@ -31,7 +31,7 @@ body {
 .main-content {
     position: relative;
     z-index: 1; /* Hace que los contenidos estén por encima del fondo */
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente para evitar que el fondo se mezcle con el contenido */
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente para evitar que el fondo se mezcle con el contenido */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
