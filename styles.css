@@ -109,61 +109,66 @@ p {
     justify-content: center;
     width: 100%;
     max-width: 500px;
-    background: #b71c1c; /* Rojo oscuro, típico de tickets de cine */
-    border: 4px solid #ffd700; /* Borde dorado */
+    background: #b71c1c; /* Rojo oscuro */
+    border: 4px solid black;
     padding: 20px;
-    border-radius: 20px; /* Bordes redondeados */
+    border-radius: 10px;
     font-family: Arial, sans-serif;
     color: white;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
-.movie-card::after {
-    content: "🎟️  CINEMA TICKET";
-    font-family: monospace;
-    font-size: 14px;
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-}
-
-
-/* Bordes recortados en los lados, simulando el corte del ticket */
+/* Efecto de recorte en los lados */
 .movie-card::before,
 .movie-card::after {
     content: "";
     position: absolute;
-    width: 40px;
-    height: 40px;
-    background: #fff;
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
+    width: 20px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 8px,
+        black 8px,
+        black 12px
+    );
+    top: 0;
 }
 
 .movie-card::before {
-    left: -22px;
-    border: 4px solid #ffd700; /* Mismo color del borde */
+    left: -24px; /* Posición del recorte izquierdo */
 }
 
 .movie-card::after {
-    right: -22px;
-    border: 4px solid #ffd700;
+    right: -24px; /* Posición del recorte derecho */
 }
 
-/* Bordes punteados para simular el corte del ticket */
-.movie-card::after,
-.movie-card::before {
-    border-style: dashed;
+/* Agregamos los semicírculos en los extremos */
+.movie-card .circle {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: 4px solid black;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
 }
 
-/* Ajuste del texto para que se vea bien */
+.movie-card .circle.left {
+    left: -20px;
+}
+
+.movie-card .circle.right {
+    right: -20px;
+}
+
+/* Ajuste de los textos */
 .movie-title {
     font-size: 22px;
     font-weight: bold;
-    text-align: center;
 }
 
 .movie-rating {
