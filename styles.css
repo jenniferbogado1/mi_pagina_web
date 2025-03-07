@@ -259,13 +259,15 @@ p {
 
 /* ---- Lista de películas ---- */
 #movieList {
-    border : none;
+    border: none;
     background-color: transparent;
     padding: 20px;
-    width: 400px;
+    width: 100%;
+    max-width: 600px; /* Limitar el tamaño máximo */
     list-style-type: none;
     position: relative;
     color: black;
+    margin: 0 auto; /* Centrar lista */
 }
 
 li {
@@ -286,6 +288,9 @@ li {
     padding: 0;
     margin-top: 20px;
     text-align: left;
+    display: flex;
+    flex-direction: column; /* Organizar los elementos en columna */
+    gap: 10px; /* Espaciado entre los elementos */
 }
 
 #watchList li {
@@ -307,12 +312,13 @@ li {
 /* Ajustes visuales del formulario */
 .form-group {
     display: flex;
+    flex-direction: column; /* Los elementos se ordenan en columna */
     justify-content: center;
-    gap: 10px;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-#movieTitleAgregar {
+#movieTitleAgregar, #movieCommentAgregar {
     padding: 12px;
     width: 300px;
     border-radius: 5px;
@@ -320,6 +326,7 @@ li {
     background-color: #fff;
     color: black;
     font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .add-movie-btn {
@@ -341,6 +348,13 @@ li {
 h2, h3 {
     color: white;
     margin-bottom: 10px;
+}
+
+/* Mensajes de error */
+#errorTitle, #errorComment {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px;
 }
 
 
