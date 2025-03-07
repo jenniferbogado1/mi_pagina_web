@@ -1,29 +1,25 @@
-// login.js
-import { auth } from './firebase-config.js'; // Importa auth desde firebase-config.js
-import { signInWithEmailAndPassword } from "firebase/auth"; // Importa la función para hacer login
+// Usuarios predefinidos
+const users = {
+    "user": { password: "1234", role: "user" },
+    "admin": { password: "admin", role: "admin" }
+};
 
-// Función de login usando Firebase
+// Función para iniciar sesión
 function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorMsg = document.getElementById("login-error");
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("login-error");
 
-  // Usamos Firebase Auth para autenticar al usuario
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // El usuario ha iniciado sesión correctamente
-      const user = userCredential.user;
-      localStorage.setItem("loggedUser", user.uid); // Guardamos el UID en el localStorage
-      window.location.href = "menu.html"; // Redirigir a la página del menú
-    })
-    .catch((error) => {
-      // Si hay un error (usuario o contraseña incorrectos)
-      errorMsg.style.display = "block";
-      console.error(error.message);
-    });
+    if (users[username] && users[username].password === password) {
+        // Guardar usuario en sesión
+        localStorage.setItem("loggedUser", username);
+        window.location.href = "menu.html"; // Redirigir a la página de películas
+    } else {
+        errorMsg.style.display = "block";
+    }
 }
 
 // Verificar si ya hay sesión activa
 if (localStorage.getItem("loggedUser")) {
-  window.location.href = "menu.html"; // Redirige automáticamente si ya está logueado
+    window.location.href = "menu.html"; // Si ya está logueado, redirige automáticamente
 }
