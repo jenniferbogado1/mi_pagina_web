@@ -12,7 +12,11 @@
 
         <div class="form-group">
             <input type="text" id="movieTitleAgregar" placeholder="Título de la película">
-            <input type="text" id="movieCommentAgregar" placeholder="Comentario sobre la película">
+            <div id="errorTitle" style="color: red;"></div> <!-- Error para el título -->
+            <br>
+            <input type="text" id="movieCommentAgregar" placeholder="Comentario">
+            <div id="errorComment" style="color: red;"></div> <!-- Error para el comentario -->
+            <br>
             <button onclick="addToWatchList()">Agregar</button>
         </div>
 
