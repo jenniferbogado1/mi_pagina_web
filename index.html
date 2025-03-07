@@ -10,57 +10,12 @@
 
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
-        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="text" id="username" placeholder="Usuario">
         <input type="password" id="password" placeholder="Contraseña">
         <button onclick="login()">Ingresar</button>
         <p id="login-error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
     </div>
 
-    <!-- Cargar Firebase desde el CDN -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-
-    <script>
-        // Tu configuración de Firebase
-        const firebaseConfig = {
-          apiKey: "AIzaSyDFezlQ68RTmss1HFnZyWFAmhjm8bstqAU",
-          authDomain: "trackermovie-10156.firebaseapp.com",
-          projectId: "trackermovie-10156",
-          storageBucket: "trackermovie-10156.firebasestorage.app",
-          messagingSenderId: "1062742578352",
-          appId: "1:1062742578352:web:b512d48c4aba27bb449775",
-          measurementId: "G-GT8CZQKM5C"
-        };
-
-        // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        // Función de login usando Firebase
-        function login() {
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value.trim();
-            const errorMsg = document.getElementById("login-error");
-
-            // Usamos Firebase Auth para autenticar al usuario
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // El usuario ha iniciado sesión correctamente
-                    const user = userCredential.user;
-                    localStorage.setItem("loggedUser", user.uid); // Guardamos el UID en el localStorage
-                    window.location.href = "menu.html"; // Redirigir a la página del menú
-                })
-                .catch((error) => {
-                    // Si hay un error (usuario o contraseña incorrectos)
-                    errorMsg.style.display = "block";
-                    console.error(error.message);
-                });
-        }
-
-        // Verificar si ya hay sesión activa
-        if (localStorage.getItem("loggedUser")) {
-            window.location.href = "menu.html"; // Redirige automáticamente si ya está logueado
-        }
-    </script>
+    <script src="login.js"></script>
 </body>
 </html>
