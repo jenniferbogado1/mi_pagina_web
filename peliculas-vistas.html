@@ -9,55 +9,57 @@
 </head>
 <body>
 
-   <h2>Películas Vistas</h2>
+  <h2>Películas Vistas</h2>
 
-   <div id="add-movie-error" class="error-message"></div>
+  <!-- Formulario para agregar película -->
+  <div id="add-movie-error" class="error-message"></div>
 
-   <div class="form-group">
-       <div class="input-group">
-           <input type="text" id="movieTitleVistas" placeholder="Título de la película">
-           <div id="errorTitle" class="error-message"></div>
-       </div>
+  <div class="form-group">
+      <div class="input-group">
+          <input type="text" id="movieTitleVistas" placeholder="Título de la película">
+          <div id="errorTitle" class="error-message"></div>
+      </div>
 
-       <div class="input-group">
-           <input type="number" id="movieScore" step="0.1" min="1" max="10" placeholder="Puntaje">
-           <div id="errorScore" class="error-message"></div>
-       </div>
+      <div class="input-group">
+          <input type="number" id="movieScore" step="0.1" min="1" max="10" placeholder="Puntaje">
+          <div id="errorScore" class="error-message"></div>
+      </div>
 
-       <div class="input-group">
-           <textarea id="movieComment" placeholder="Comentario"></textarea>
-           <div id="errorComment" class="error-message"></div>
-       </div>
+      <div class="input-group">
+          <textarea id="movieComment" placeholder="Comentario"></textarea>
+          <div id="errorComment" class="error-message"></div>
+      </div>
 
-       <button class="add-movie-btn" onclick="addMovie()">Agregar Película</button>
-   </div>
+      <button class="add-movie-btn" onclick="addMovie()">Agregar Película</button>
+  </div>
 
-   <h3>Lista de películas vistas:</h3>
+  <h3>Lista de películas vistas:</h3>
 
-   <input type="text" id="searchMovie" placeholder="Buscar película..." oninput="searchMovie()">
+  <!-- Buscador de película -->
+  <input type="text" id="searchMovie" placeholder="Buscar película..." oninput="searchMovie()">
 
-   <!-- Contenedor de películas vistas -->
-   <div class="movies-container" id="moviesContainer">
-       <!-- Cada película se agrega aquí como una tarjeta -->
-       <!-- Ejemplo de tarjeta de película -->
-       <div class="movie-card">
-           <div class="movie-title">Título de la Película</div>
-           <div class="movie-rating">Puntaje: 8.5</div>
-           <div class="movie-stars">
-               ★★★★☆
-           </div>
-           <div class="movie-details">
-               <div class="movie-comment">Comentario sobre la película.</div>
-               <!-- Aquí puedes agregar botones para editar o eliminar si es necesario -->
-           </div>
-           <!-- Los círculos decorativos se agregarán automáticamente en los extremos -->
-           <div class="circle left"></div>
-           <div class="circle right"></div>
-       </div>
-       <!-- Aquí más tarjetas de películas -->
-   </div>
+  <!-- Contenedor de las tarjetas de películas -->
+  <div class="movies-container" id="moviesContainer">
+    <!-- Aquí irán las tarjetas de película -->
+    <div class="movie-card">
+        <div class="movie-title">
+            <h4>Título de la Película</h4>
+            <input type="text" value="Título editado" style="display:none;">
+        </div>
+        <div class="movie-rating">
+            <p>9.5</p>
+        </div>
+        <div class="movie-stars">
+            ★★★★☆
+        </div>
+        <div class="movie-comment">
+            <p>Comentario de la película</p>
+        </div>
+    </div>
+  </div>
 
-   <a href="menu.html">Volver al menú</a>
+  <!-- Enlace para regresar al menú -->
+  <a href="menu.html">Volver al menú</a>
 
 </body>
 </html>
