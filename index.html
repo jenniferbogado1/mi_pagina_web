@@ -3,29 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas por Ver</title>
+    <title>Bienvenido</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Agregar Película a la Watchlist</h2>
-
-        <div class="form-group">
-            <input type="text" id="movieTitleAgregar" placeholder="Título de la película">
-            <div id="errorTitle" style="color: red;"></div> <!-- Error para el título -->
-            <br>
-            <input type="text" id="movieCommentAgregar" placeholder="Comentario">
-            <div id="errorComment" style="color: red;"></div> <!-- Error para el comentario -->
-            <br>
-            <button onclick="addToWatchList()">Agregar</button>
-        </div>
-
-        <h3>Lista de Películas por Ver</h3>
-        <ul id="watchList"></ul>
-
-        <a href="index.html">Volver al Menú</a>
+    <div class="welcome-container">
+        <h1>¡Bienvenido a tu Tracker de Películas!</h1>
+        <p>Organiza y califica tus películas favoritas.</p>
+        <a href="menu.html" class="welcome-button">Ir al Menú</a>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
