@@ -118,6 +118,18 @@ p {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
+.movie-card::after {
+    content: "🎟️  CINEMA TICKET";
+    font-family: monospace;
+    font-size: 14px;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+}
+
+
 /* Bordes recortados en los lados, simulando el corte del ticket */
 .movie-card::before,
 .movie-card::after {
