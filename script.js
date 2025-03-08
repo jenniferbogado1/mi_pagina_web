@@ -243,7 +243,6 @@ function loadWatchList() {
     const list = document.getElementById('watchList');
     list.innerHTML = '';
 
-    }
 
     watchList.forEach((movie, index) => {
         const item = document.createElement('li');
