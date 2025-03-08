@@ -243,9 +243,6 @@ function loadWatchList() {
     const list = document.getElementById('watchList');
     list.innerHTML = '';
 
-    // Verificar si la lista está vacía
-    if (watchList.length === 0) {
-        list.innerHTML = '<p>No hay películas en la lista.</p>';
     }
 
     watchList.forEach((movie, index) => {
